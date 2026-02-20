@@ -1,300 +1,289 @@
 #!/usr/bin/env python3
 """
-Prime-AI — Automated Demo Video Recorder
-=========================================
-Records browser-based demo videos for each use case.
-Uses Playwright + ffmpeg to create polished MP4 promo videos.
+Prime-AI — Full End-to-End Demo Video Recorder
+================================================
+Records 6 use case videos using Playwright's native video recording.
+Each use case becomes a separate MP4 file ready for marketing.
 
-Usage:
-  pip install playwright
-  playwright install chromium
-  python record_demo.py
-
-Output: demo_videos/ directory with MP4 files
+Output: demo_videos/*.webm (auto-converted to .mp4 if ffmpeg available)
 """
-
-import os
-import sys
-import json
-import time
-import subprocess
+import os, sys, time, json, subprocess
 from pathlib import Path
 
-DEMO_DIR = Path(__file__).parent / "demo_videos"
-DEMO_DIR.mkdir(exist_ok=True)
+os.environ.setdefault("HOME", os.environ.get("USERPROFILE", "C:\\Users\\Default"))
 
-BASE_URL = "http://localhost:8080"
+from playwright.sync_api import sync_playwright
+
+BASE = "http://localhost:8080"
+OUT = Path(__file__).parent / "demo_videos"
+OUT.mkdir(exist_ok=True)
+
+def smooth_scroll(page, target_y, steps=20, delay=0.04):
+    """Smooth scroll animation."""
+    current = page.evaluate("window.scrollY")
+    step_size = (target_y - current) / steps
+    for i in range(steps):
+        page.evaluate(f"window.scrollTo(0, {int(current + step_size * (i+1))})")
+        time.sleep(delay)
+
+def smooth_type(page, selector, text, delay=0.05):
+    """Type text with human-like speed."""
+    page.click(selector)
+    for char in text:
+        page.keyboard.type(char)
+        time.sleep(delay)
+
+def record_use_case(browser, uc_id, title, actions_fn):
+    """Record a single use case as video."""
+    print(f"\n  {'='*50}")
+    print(f"  Recording: {title}")
+    print(f"  {'='*50}")
+
+    vid_dir = OUT / f"raw_{uc_id}"
+    vid_dir.mkdir(exist_ok=True)
+
+    context = browser.new_context(
+        viewport={"width": 1280, "height": 720},
+        record_video_dir=str(vid_dir),
+        record_video_size={"width": 1280, "height": 720},
+        device_scale_factor=1,
+    )
+
+    page = context.new_page()
+
+    # Pre-auth: get dev token
+    try:
+        page.goto(f"{BASE}/api/auth/dev", wait_until="networkidle", timeout=8000)
+        auth_text = page.evaluate("document.body.innerText")
+        auth = json.loads(auth_text)
+        token = auth.get("token", "")
+        user = json.dumps(auth.get("user", {})).replace("'", "\\'")
+        page.goto(BASE, wait_until="domcontentloaded", timeout=8000)
+        page.evaluate(f"localStorage.setItem('auth_token', '{token}')")
+        page.evaluate(f"localStorage.setItem('auth_user', '{user}')")
+        print(f"    [auth] JWT OK")
+    except Exception as e:
+        print(f"    [auth] skip: {e}")
+
+    try:
+        actions_fn(page)
+    except Exception as e:
+        print(f"    [error] {e}")
+
+    # Get video path before closing
+    video = page.video
+    context.close()
+
+    # Find the recorded video
+    vids = list(vid_dir.glob("*.webm"))
+    if vids:
+        src = vids[0]
+        dst = OUT / f"{uc_id}.webm"
+        src.rename(dst)
+        size = dst.stat().st_size / 1024 / 1024
+        print(f"    [OK] {dst.name} ({size:.1f} MB)")
+
+        # Convert to MP4
+        mp4 = OUT / f"{uc_id}.mp4"
+        try:
+            ffmpeg_path = list(Path(os.environ.get("LOCALAPPDATA", "")) .rglob("ffmpeg.exe"))
+            ff = str(ffmpeg_path[0]) if ffmpeg_path else "ffmpeg"
+            subprocess.run([
+                ff, "-y", "-i", str(dst),
+                "-c:v", "libx264", "-preset", "fast",
+                "-pix_fmt", "yuv420p", "-r", "30",
+                str(mp4)
+            ], capture_output=True, timeout=120)
+            if mp4.exists():
+                mp4_size = mp4.stat().st_size / 1024 / 1024
+                print(f"    [OK] {mp4.name} ({mp4_size:.1f} MB)")
+                return str(mp4)
+        except Exception as e:
+            print(f"    [warn] ffmpeg: {e}")
+        return str(dst)
+    else:
+        print(f"    [warn] no video found")
+        return None
+
 
 # ═══════════════════════════════════════════
-#  USE CASES — Each becomes a demo video
+#  USE CASE ACTIONS
+# ═══════════════════════════════════════════
+
+def uc_landing(page):
+    """UC1: Marketing landing page showcase."""
+    page.goto(f"{BASE}/landing.html", wait_until="networkidle", timeout=15000)
+    time.sleep(3)
+    smooth_scroll(page, 400)
+    time.sleep(2)
+    smooth_scroll(page, 900)
+    time.sleep(2)
+    smooth_scroll(page, 1400)
+    time.sleep(2)
+    smooth_scroll(page, 2000)
+    time.sleep(2)
+    smooth_scroll(page, 2600)
+    time.sleep(2)
+    smooth_scroll(page, 3200)
+    time.sleep(2)
+    smooth_scroll(page, 0)
+    time.sleep(2)
+
+def uc_auto_login(page):
+    """UC2: Zero-click auto login flow."""
+    page.goto(f"{BASE}/login.html", wait_until="networkidle", timeout=15000)
+    time.sleep(3)
+    # The page should auto-login and redirect to main app
+    time.sleep(5)
+    # Show dashboard
+    time.sleep(3)
+
+def uc_classifier(page):
+    """UC3: AI Risk Classifier - classify any AI system."""
+    page.goto(BASE, wait_until="networkidle", timeout=15000)
+    time.sleep(3)
+    # Navigate to Classify screen
+    try:
+        page.click("[data-screen='classify']", timeout=3000)
+    except:
+        page.evaluate("typeof go === 'function' && go('classify')")
+    time.sleep(1.5)
+    # Type a description
+    desc = "AI system that automatically screens job applicants CVs and makes hiring decisions based on personality traits and facial analysis"
+    smooth_type(page, "#classifyInput", desc, 0.03)
+    time.sleep(1)
+    # Click classify
+    page.click("#classifyBtn")
+    time.sleep(6)
+    # Scroll result
+    try:
+        page.evaluate("document.querySelector('.screen.active .screen-scroll')?.scrollBy({top: 300, behavior: 'smooth'})")
+    except:
+        pass
+    time.sleep(3)
+
+def uc_scanner(page):
+    """UC4: URL Compliance Scanner."""
+    page.goto(BASE, wait_until="networkidle", timeout=15000)
+    time.sleep(2)
+    try:
+        page.click("[data-screen='scan']", timeout=3000)
+    except:
+        page.evaluate("typeof go === 'function' && go('scan')")
+    time.sleep(1.5)
+    smooth_type(page, "#scanUrl", "openai.com", 0.06)
+    time.sleep(0.5)
+    page.click("#scanBtn")
+    time.sleep(8)
+    try:
+        page.evaluate("document.querySelector('.screen.active .screen-scroll')?.scrollBy({top: 400, behavior: 'smooth'})")
+    except:
+        pass
+    time.sleep(3)
+
+def uc_audit(page):
+    """UC5: 9-Requirement Compliance Audit."""
+    page.goto(BASE, wait_until="networkidle", timeout=15000)
+    time.sleep(2)
+    try:
+        page.click("[data-screen='audit']", timeout=3000)
+    except:
+        page.evaluate("typeof go === 'function' && go('audit')")
+    time.sleep(1.5)
+    # Fill audit name
+    try:
+        smooth_type(page, "#auditName", "PrimeAI Recruitment System v2", 0.04)
+    except:
+        pass
+    time.sleep(0.5)
+    # Set slider values
+    page.evaluate("""
+        document.querySelectorAll('input[type=range]').forEach((s, i) => {
+            s.value = [75, 60, 80, 50, 70, 85, 45, 90, 65][i] || 50;
+            s.dispatchEvent(new Event('input'));
+        })
+    """)
+    time.sleep(1)
+    page.click("#auditBtn")
+    time.sleep(6)
+    try:
+        page.evaluate("document.querySelector('.screen.active .screen-scroll')?.scrollBy({top: 400, behavior: 'smooth'})")
+    except:
+        pass
+    time.sleep(3)
+
+def uc_knowledge_base(page):
+    """UC6: EU AI Act Knowledge Base browse."""
+    page.goto(BASE, wait_until="networkidle", timeout=15000)
+    time.sleep(2)
+    try:
+        page.click("[data-screen='kb']", timeout=3000)
+    except:
+        page.evaluate("typeof go === 'function' && go('kb')")
+    time.sleep(2)
+    try:
+        scr = ".screen.active .screen-scroll"
+        page.evaluate(f"document.querySelector('{scr}')?.scrollBy({{top: 300, behavior: 'smooth'}})")
+        time.sleep(2)
+        page.evaluate(f"document.querySelector('{scr}')?.scrollBy({{top: 300, behavior: 'smooth'}})")
+        time.sleep(2)
+        page.evaluate(f"document.querySelector('{scr}')?.scrollBy({{top: 300, behavior: 'smooth'}})")
+        time.sleep(2)
+        page.evaluate(f"document.querySelector('{scr}')?.scrollBy({{top: 300, behavior: 'smooth'}})")
+        time.sleep(2)
+    except:
+        pass
+
+
+# ═══════════════════════════════════════════
+#  MAIN
 # ═══════════════════════════════════════════
 
 USE_CASES = [
-    {
-        "id": "01_landing",
-        "title": "Prime-AI Landing Page",
-        "description": "Marketing landing page with countdown, pricing, and feature showcase",
-        "url": f"{BASE_URL}/landing.html",
-        "actions": [
-            {"type": "wait", "ms": 2000},
-            {"type": "scroll", "y": 400, "ms": 1500},
-            {"type": "scroll", "y": 900, "ms": 1500},
-            {"type": "scroll", "y": 1400, "ms": 1500},
-            {"type": "scroll", "y": 2000, "ms": 1500},
-            {"type": "scroll", "y": 2600, "ms": 1500},
-            {"type": "scroll", "y": 0, "ms": 2000},
-        ]
-    },
-    {
-        "id": "02_auto_login",
-        "title": "Zero-Click Authentication",
-        "description": "Auto JWT authentication — no manual login needed",
-        "url": f"{BASE_URL}/",
-        "actions": [
-            {"type": "wait", "ms": 3000},
-            {"type": "screenshot", "name": "dashboard"},
-        ]
-    },
-    {
-        "id": "03_url_scanner",
-        "title": "URL Compliance Scanner",
-        "description": "Scan any website for EU AI Act compliance",
-        "url": f"{BASE_URL}/",
-        "actions": [
-            {"type": "wait", "ms": 2000},
-            {"type": "click", "selector": "[data-screen='scan']"},
-            {"type": "wait", "ms": 500},
-            {"type": "type", "selector": "#scanUrl", "text": "openai.com"},
-            {"type": "wait", "ms": 500},
-            {"type": "click", "selector": "#scanBtn"},
-            {"type": "wait", "ms": 8000},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 300, "ms": 1500},
-            {"type": "screenshot", "name": "scan_result"},
-        ]
-    },
-    {
-        "id": "04_classifier",
-        "title": "AI Risk Classifier",
-        "description": "Classify any AI system into 4 EU risk levels",
-        "url": f"{BASE_URL}/",
-        "actions": [
-            {"type": "wait", "ms": 2000},
-            {"type": "click", "selector": "[data-screen='classify']"},
-            {"type": "wait", "ms": 500},
-            {"type": "type", "selector": "#classifyInput",
-             "text": "AI system that screens job applicants' CVs and makes automated hiring decisions based on personality analysis"},
-            {"type": "wait", "ms": 500},
-            {"type": "click", "selector": "#classifyBtn"},
-            {"type": "wait", "ms": 5000},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 200, "ms": 1000},
-            {"type": "screenshot", "name": "classify_result"},
-        ]
-    },
-    {
-        "id": "05_audit",
-        "title": "9-Requirement Compliance Audit",
-        "description": "Full audit against Articles 8-15 of the EU AI Act",
-        "url": f"{BASE_URL}/",
-        "actions": [
-            {"type": "wait", "ms": 2000},
-            {"type": "click", "selector": "[data-screen='audit']"},
-            {"type": "wait", "ms": 500},
-            {"type": "type", "selector": "#auditName", "text": "PrimeAI Recruitment v2"},
-            {"type": "wait", "ms": 300},
-            # Set some slider values
-            {"type": "eval", "code": "document.querySelectorAll('.audit-slider input[type=range]').forEach((s,i) => s.value = [75,60,80,50,70,85,45,90,65][i] || 50)"},
-            {"type": "wait", "ms": 500},
-            {"type": "click", "selector": "#auditBtn"},
-            {"type": "wait", "ms": 5000},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 300, "ms": 1500},
-            {"type": "screenshot", "name": "audit_result"},
-        ]
-    },
-    {
-        "id": "06_knowledge_base",
-        "title": "EU AI Act Knowledge Base",
-        "description": "Complete regulatory database — prohibited practices, high-risk categories, requirements",
-        "url": f"{BASE_URL}/",
-        "actions": [
-            {"type": "wait", "ms": 2000},
-            {"type": "click", "selector": "[data-screen='kb']"},
-            {"type": "wait", "ms": 1000},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 400, "ms": 1500},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 800, "ms": 1500},
-            {"type": "scroll_el", "selector": ".screen-scroll", "y": 1200, "ms": 1500},
-            {"type": "screenshot", "name": "kb"},
-        ]
-    },
+    ("uc1_landing",    "UC1: Marketing Landing Page",      uc_landing),
+    ("uc2_auto_login", "UC2: Zero-Click Auto Login",       uc_auto_login),
+    ("uc3_classifier", "UC3: AI Risk Classifier",          uc_classifier),
+    ("uc4_scanner",    "UC4: URL Compliance Scanner",      uc_scanner),
+    ("uc5_audit",      "UC5: 9-Requirement Audit",         uc_audit),
+    ("uc6_kb",         "UC6: Knowledge Base",              uc_knowledge_base),
 ]
 
-
-def record_use_case(page, uc):
-    """Record a single use case as video frames."""
-    print(f"\n{'='*60}")
-    print(f"  Recording: {uc['title']}")
-    print(f"  {uc['description']}")
-    print(f"{'='*60}")
-
-    uc_dir = DEMO_DIR / uc["id"]
-    uc_dir.mkdir(exist_ok=True)
-
-    # Navigate
-    page.goto(uc["url"], wait_until="networkidle", timeout=15000)
-    frame_n = 0
-
-    for action in uc.get("actions", []):
-        t = action["type"]
-
-        if t == "wait":
-            time.sleep(action["ms"] / 1000)
-        elif t == "scroll":
-            page.evaluate(f"window.scrollTo({{top: {action['y']}, behavior: 'smooth'}})")
-            time.sleep(action.get("ms", 1000) / 1000)
-        elif t == "scroll_el":
-            page.evaluate(f"document.querySelector('{action['selector']}')?.scrollTo({{top: {action['y']}, behavior: 'smooth'}})")
-            time.sleep(action.get("ms", 1000) / 1000)
-        elif t == "click":
-            try:
-                page.click(action["selector"], timeout=3000)
-            except Exception as e:
-                print(f"  [warn] click failed: {e}")
-            time.sleep(0.3)
-        elif t == "type":
-            try:
-                page.fill(action["selector"], action["text"])
-            except Exception as e:
-                print(f"  [warn] type failed: {e}")
-            time.sleep(0.3)
-        elif t == "eval":
-            try:
-                page.evaluate(action["code"])
-            except Exception as e:
-                print(f"  [warn] eval failed: {e}")
-        elif t == "screenshot":
-            path = uc_dir / f"{action['name']}.png"
-            page.screenshot(path=str(path), full_page=False)
-            print(f"  [screenshot] {path}")
-
-        # Capture frame after each action
-        frame_path = uc_dir / f"frame_{frame_n:04d}.png"
-        page.screenshot(path=str(frame_path), full_page=False)
-        frame_n += 1
-        print(f"  [frame {frame_n}] {t}")
-
-    print(f"  => {frame_n} frames captured")
-    return frame_n
-
-
-def frames_to_video(uc_id, fps=2):
-    """Convert frames to MP4 using ffmpeg."""
-    uc_dir = DEMO_DIR / uc_id
-    output = DEMO_DIR / f"{uc_id}.mp4"
-    pattern = str(uc_dir / "frame_%04d.png")
-
-    cmd = [
-        "ffmpeg", "-y",
-        "-framerate", str(fps),
-        "-i", pattern,
-        "-c:v", "libx264",
-        "-pix_fmt", "yuv420p",
-        "-vf", "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:color=black",
-        "-r", "30",
-        str(output),
-    ]
-
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-        if result.returncode == 0:
-            size_mb = output.stat().st_size / 1024 / 1024
-            print(f"  [OK] {output.name} ({size_mb:.1f} MB)")
-            return True
-        else:
-            print(f"  [WARN] ffmpeg failed: {result.stderr[:200]}")
-            return False
-    except FileNotFoundError:
-        print("  [WARN] ffmpeg not found — frames saved as PNGs")
-        return False
-    except Exception as e:
-        print(f"  [WARN] video conversion failed: {e}")
-        return False
-
-
 def main():
-    print("╔══════════════════════════════════════════════╗")
-    print("║  Prime-AI — Demo Video Recorder              ║")
-    print("║  Recording all use cases for GitHub promo     ║")
-    print("╚══════════════════════════════════════════════╝")
+    print("+" + "="*54 + "+")
+    print("|  Prime-AI — End-to-End Demo Recorder                 |")
+    print("|  6 Use Cases → MP4 Videos for Marketing              |")
+    print("+" + "="*54 + "+")
 
-    # Try to import playwright
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        print("\n  Installing playwright...")
-        subprocess.run([sys.executable, "-m", "pip", "install", "playwright"], check=True)
-        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=True)
-        from playwright.sync_api import sync_playwright
+    results = []
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(
-            viewport={"width": 1280, "height": 720},
-            device_scale_factor=2,
-        )
 
-        # Start with video recording context
-        page = context.new_page()
-
-        # Auto-auth: get dev token
-        print("\n  Getting dev JWT...")
-        page.goto(f"{BASE_URL}/api/auth/dev", wait_until="networkidle")
-        try:
-            auth_json = page.evaluate("document.body.innerText")
-            auth_data = json.loads(auth_json)
-            token = auth_data.get("token", "")
-            user = json.dumps(auth_data.get("user", {}))
-            # Set in localStorage
-            page.goto(BASE_URL, wait_until="domcontentloaded")
-            page.evaluate(f"localStorage.setItem('auth_token', '{token}')")
-            page.evaluate(f"localStorage.setItem('auth_user', '{user}')")
-            print(f"  [OK] Authenticated as {auth_data.get('user', {}).get('email', '?')}")
-        except Exception as e:
-            print(f"  [WARN] Auth: {e}")
-
-        # Record each use case
-        total_frames = 0
-        for uc in USE_CASES:
-            frames = record_use_case(page, uc)
-            total_frames += frames
+        for uc_id, title, action_fn in USE_CASES:
+            path = record_use_case(browser, uc_id, title, action_fn)
+            results.append({"id": uc_id, "title": title, "path": path})
 
         browser.close()
 
-    # Convert frames to videos
-    print("\n\n  Converting to MP4...")
-    videos_ok = 0
-    for uc in USE_CASES:
-        if frames_to_video(uc["id"]):
-            videos_ok += 1
+    # Summary
+    print(f"\n\n  {'='*54}")
+    print(f"  RESULTS")
+    print(f"  {'='*54}")
+    ok = 0
+    for r in results:
+        status = "[OK]" if r["path"] else "[FAIL]"
+        if r["path"]:
+            ok += 1
+        print(f"  {status} {r['title']:<40s} {r['path'] or 'N/A'}")
 
-    # Create master compilation script
-    manifest = {
-        "project": "Prime-AI EU AI Act Compliance",
-        "website": "https://yace19ai.com",
-        "github": "https://github.com/Yacinewhatchandcode",
-        "use_cases": [
-            {"id": uc["id"], "title": uc["title"], "description": uc["description"]}
-            for uc in USE_CASES
-        ],
-        "total_frames": total_frames,
-        "videos_created": videos_ok,
-    }
-    with open(DEMO_DIR / "manifest.json", "w") as f:
-        json.dump(manifest, f, indent=2)
+    print(f"\n  {ok}/{len(results)} videos recorded")
+    print(f"  Output: {OUT}")
 
-    print(f"\n{'='*60}")
-    print(f"  DONE! {total_frames} frames, {videos_ok} videos")
-    print(f"  Output: {DEMO_DIR}")
-    print(f"{'='*60}")
+    # Manifest
+    with open(OUT / "manifest.json", "w") as f:
+        json.dump({"videos": results, "total": len(results), "ok": ok}, f, indent=2)
 
+    print(f"\n  Done!")
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,36 @@
+{
+  "videos": [
+    {
+      "id": "uc1_landing",
+      "title": "UC1: Marketing Landing Page",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc1_landing.mp4"
+    },
+    {
+      "id": "uc2_auto_login",
+      "title": "UC2: Zero-Click Auto Login",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc2_auto_login.mp4"
+    },
+    {
+      "id": "uc3_classifier",
+      "title": "UC3: AI Risk Classifier",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc3_classifier.mp4"
+    },
+    {
+      "id": "uc4_scanner",
+      "title": "UC4: URL Compliance Scanner",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc4_scanner.mp4"
+    },
+    {
+      "id": "uc5_audit",
+      "title": "UC5: 9-Requirement Audit",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc5_audit.mp4"
+    },
+    {
+      "id": "uc6_kb",
+      "title": "UC6: Knowledge Base",
+      "path": "C:\\Users\\Mr Robot\\YBE\\demo_videos\\uc6_kb.mp4"
+    }
+  ],
+  "total": 6,
+  "ok": 6
+}
