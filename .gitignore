@@ -1,17 +1,71 @@
-__pycache__/
-*.pyc
-.env
+# Dependencies
 node_modules/
 .venv/
-*.egg-info/
-dist/
-build/
+__pycache__/
+*.pyc
+
+# Environment & secrets
+.env
+*.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
-*.zip
-*.jpeg
-*.jpg
-*.png
-!web/*.png
-!web/*.svg
+desktop.ini
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Personal/sensitive data
+prospects*.yaml
+prospects*.csv
+prospects*.json
+reminder.txt
+memory/*.md
+MEMORY.md
+HEARTBEAT.md
+SOUL.md
+VOICE.md
+USER.md
+IDENTITY.md
+
+# Internal scripts
+csv_to_yaml.py
+enrich_prospects.py
+prospect_finder*.py
+email_campaign.py
+email_preview.html
+send_wa_ws.py
+send_whatsapp.py
+login_whatsapp.ps1
+demo_android.py
+push_to_github.ps1
+update_yaml.py
+transcribe.py
+desktop_control.py
+browser_tools.py
+
+# Temporary video files
+demo_videos/raw_*/
+demo_videos/card_*/
+demo_videos/fast_*/
+demo_videos/*.webm
+demo_videos/*.wav
+demo_videos/*.html
+
+# Large files
+*.gif
+NEWS_SEED.json
+
+# Gemini/agent internal
 .gemini/
+.agent/
