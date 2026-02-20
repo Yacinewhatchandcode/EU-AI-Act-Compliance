@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#05080f"/>
+      <stop offset="100%" style="stop-color:#0c1120"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c63ff"/>
+      <stop offset="50%" style="stop-color:#8b7dff"/>
+      <stop offset="100%" style="stop-color:#00e676"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <!-- Glow circles -->
+  <circle cx="300" cy="250" r="200" fill="#6c63ff" opacity="0.06"/>
+  <circle cx="780" cy="600" r="250" fill="#00e676" opacity="0.04"/>
+  <circle cx="540" cy="900" r="180" fill="#ff5252" opacity="0.03"/>
+  <!-- EU Flag -->
+  <text x="540" y="300" text-anchor="middle" font-size="120">🇪🇺</text>
+  <!-- Title -->
+  <text x="540" y="450" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="72" font-weight="900" fill="url(#title)">Prime-AI</text>
+  <!-- Subtitle -->
+  <text x="540" y="540" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="36" fill="#9fa8c4">EU AI Act Compliance</text>
+  <!-- Main question -->
+  <text x="540" y="660" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="48" font-weight="800" fill="#e8eaf6">Votre IA est-elle</text>
+  <text x="540" y="730" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="56" font-weight="900" fill="#ff5252" filter="url(#glow)">CONFORME ?</text>
+  <!-- Stats -->
+  <rect x="140" y="800" width="200" height="120" rx="16" fill="#141d30" stroke="#6c63ff" stroke-opacity="0.2"/>
+  <text x="240" y="855" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="900" fill="#ff5252">8</text>
+  <text x="240" y="895" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#4a5578">INTERDITS</text>
+  <rect x="380" y="800" width="200" height="120" rx="16" fill="#141d30" stroke="#6c63ff" stroke-opacity="0.2"/>
+  <text x="480" y="855" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="900" fill="#ff9100">8</text>
+  <text x="480" y="895" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#4a5578">HAUT RISQUE</text>
+  <rect x="620" y="800" width="200" height="120" rx="16" fill="#141d30" stroke="#6c63ff" stroke-opacity="0.2"/>
+  <text x="720" y="855" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="900" fill="#6c63ff">9</text>
+  <text x="720" y="895" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="16" fill="#4a5578">EXIGENCES</text>
+  <!-- CTA -->
+  <rect x="290" y="970" width="500" height="60" rx="12" fill="#6c63ff"/>
+  <text x="540" y="1010" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="700" fill="white">Scannez votre site gratuitement</text>
+</svg>

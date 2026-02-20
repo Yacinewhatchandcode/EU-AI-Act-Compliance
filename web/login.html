@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0e1a">
+    <title>Sign In — EU AI Act Compliance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --surface: #141925;
+            --surface2: #1c2236;
+            --primary: #6c63ff;
+            --primary-glow: rgba(108, 99, 255, 0.3);
+            --green: #00e676;
+            --text: #e8eaf6;
+            --text2: #9fa8c4;
+            --text3: #5a6384;
+            --radius: 16px;
+            --red: #ff5252;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(108, 99, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(0, 230, 118, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255, 82, 82, 0.04) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes bgShift {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-5%, 3%) rotate(3deg);
+            }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            padding: 40px 32px;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .login-logo {
+            font-size: 64px;
+            margin-bottom: -8px;
+            filter: drop-shadow(0 0 30px var(--primary-glow));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--primary) 0%, #a78bfa 50%, var(--green) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--text2);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .login-card {
+            background: var(--surface);
+            border: 1px solid rgba(108, 99, 255, 0.15);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-card h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text2);
+        }
+
+        /* Google Sign-In button container */
+        #g_id_onload,
+        .g_id_signin {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .login-divider {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text3);
+            font-size: 12px;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--text3);
+            opacity: 0.3;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 6px;
+            border-radius: 10px;
+            background: var(--surface2);
+            font-size: 11px;
+            color: var(--text2);
+            text-align: center;
+        }
+
+        .feature-item .fi-icon {
+            font-size: 20px;
+        }
+
+        .login-footer {
+            font-size: 11px;
+            color: var(--text3);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Error message */
+        .login-error {
+            display: none;
+            background: rgba(255, 82, 82, 0.15);
+            border: 1px solid rgba(255, 82, 82, 0.3);
+            color: var(--red);
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-error.show {
+            display: block;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            75% {
+                transform: translateX(6px);
+            }
+        }
+
+        /* Loading state */
+        .login-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .login-loading.show {
+            display: flex;
+        }
+
+        .login-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--surface2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Shield badge */
+        .shield-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--green);
+        }
+
+        /* Dev mode banner */
+        .dev-banner {
+            display: none;
+            background: rgba(255, 171, 0, 0.15);
+            border: 1px solid rgba(255, 171, 0, 0.3);
+            color: #ffab00;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            width: 100%;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .dev-banner.show {
+            display: block;
+        }
+
+        .dev-bypass {
+            background: rgba(255, 171, 0, 0.2);
+            border: 1px solid rgba(255, 171, 0, 0.4);
+            color: #ffab00;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+
+        .dev-bypass:hover {
+            background: rgba(255, 171, 0, 0.35);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-logo">🇪🇺</div>
+        <h1 class="login-title">EU AI Act Compliance</h1>
+        <p class="login-subtitle">
+            Classify, audit, and scan any AI system against<br>
+            EU Regulation 2024/1689 — powered by PRIME.AI
+        </p>
+
+        <div class="shield-badge">🔒 Authenticated Access Only</div>
+
+        <div class="login-card">
+            <h2>Sign in to continue</h2>
+
+            <!-- Google Sign-In Button -->
+            <div id="googleBtnWrap">
+                <div id="g_id_onload" data-client_id="PLACEHOLDER" data-context="signin" data-ux_mode="popup"
+                    data-callback="handleCredentialResponse" data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black"
+                    data-text="signin_with" data-size="large" data-logo_alignment="center" data-width="280">
+                </div>
+            </div>
+
+            <!-- Loading state -->
+            <div class="login-loading" id="loginLoading">
+                <div class="login-spinner"></div>
+                <span style="color:var(--text2); font-size:13px">Verifying with Google...</span>
+            </div>
+
+            <!-- Error message -->
+            <div class="login-error" id="loginError"></div>
+
+            <!-- Dev mode banner -->
+            <div class="dev-banner" id="devBanner">
+                ⚠️ Google OAuth not configured.<br>
+                Set <code>GOOGLE_CLIENT_ID</code> env var.<br>
+                <button class="dev-bypass" onclick="devBypass()">🔓 Dev Mode — Skip Auth</button>
+            </div>
+
+            <div class="login-divider">What you can do</div>
+
+            <div class="feature-row">
+                <div class="feature-item">
+                    <span class="fi-icon">🌐</span>
+                    Scan any URL
+                </div>
+                <div class="feature-item">
+                    <span class="fi-icon">🏷️</span>
+                    Classify AI
+                </div>
+                <div class="feature-item">
+                    <span class="fi-icon">📄</span>
+                    Full Reports
+                </div>
+            </div>
+        </div>
+
+        <p class="login-footer">
+            🔐 Your data is processed in the EU under GDPR.<br>
+            We only store your name and email for session auth.<br>
+            <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj" target="_blank">Read the EU AI Act →</a>
+        </p>
+    </div>
+
+    <script>
+        const API = location.origin + '/api';
+
+        // Check if already authenticated
+        (async () => {
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+                try {
+                    const res = await fetch(API + '/auth/status', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    const data = await res.json();
+                    if (data.authenticated) {
+                        window.location.href = '/';
+                        return;
+                    }
+                } catch (e) { }
+                localStorage.removeItem('auth_token');
+            }
+
+            // Load Google Client ID from server
+            try {
+                const res = await fetch(API + '/auth/config');
+                const config = await res.json();
+                if (config.client_id && !config.client_id.includes('YOUR_GOOGLE')) {
+                    // Set the real client ID
+                    document.getElementById('g_id_onload').setAttribute('data-client_id', config.client_id);
+                    // Re-initialize Google Sign-In
+                    if (window.google && google.accounts) {
+                        google.accounts.id.initialize({
+                            client_id: config.client_id,
+                            callback: handleCredentialResponse,
+                            ux_mode: 'popup',
+                        });
+                        google.accounts.id.renderButton(
+                            document.querySelector('.g_id_signin'),
+                            { theme: 'filled_black', size: 'large', shape: 'pill', width: 280, text: 'signin_with' }
+                        );
+                    }
+                } else {
+                    // No Google OAuth — auto-login immediately, no click needed
+                    devBypass();
+                    return;
+                }
+            } catch (e) {
+                // Server error — auto-login in dev mode
+                devBypass();
+                return;
+            }
+        })();
+
+        // Google credential response
+        function handleCredentialResponse(response) {
+            document.getElementById('loginLoading').classList.add('show');
+            document.getElementById('loginError').classList.remove('show');
+
+            fetch(API + '/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('loginLoading').classList.remove('show');
+                    if (data.success) {
+                        localStorage.setItem('auth_token', data.token);
+                        localStorage.setItem('auth_user', JSON.stringify(data.user));
+                        window.location.href = '/';
+                    } else {
+                        showError(data.error || 'Authentication failed');
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('loginLoading').classList.remove('show');
+                    showError('Network error: ' + err.message);
+                });
+        }
+
+        // Dev bypass (only when Google OAuth is not configured)
+        function devBypass() {
+            // Get a real JWT from the server's dev endpoint
+            fetch(API + '/auth/dev')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem('auth_token', data.token);
+                        localStorage.setItem('auth_user', JSON.stringify(data.user));
+                        window.location.href = '/';
+                    } else {
+                        showError(data.error || 'Dev mode not available');
+                    }
+                })
+                .catch(err => showError('Failed: ' + err.message));
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('loginError');
+            el.textContent = '❌ ' + msg;
+            el.classList.add('show');
+        }
+    </script>
+</body>
+
+</html>

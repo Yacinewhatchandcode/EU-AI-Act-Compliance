@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: #05080f;
+    color: #e8eaf6;
+    width: 1280px; height: 720px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.slide {
+    width: 100%; height: 100%; padding: 80px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+}
+.slide::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 30% 40%, #00bfa522 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, #00bfa511 0%, transparent 50%);
+}
+.content { position: relative; z-index: 1; }
+.category {
+    font-size: 14px; font-weight: 600; color: #00bfa5;
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+}
+h1 {
+    font-size: 56px; font-weight: 900; letter-spacing: -1px;
+    margin-bottom: 20px; line-height: 1.1;
+}
+h1 span { color: #00bfa5; }
+.desc {
+    font-size: 22px; color: #9fa8c4; line-height: 1.6;
+    max-width: 700px; margin-bottom: 32px;
+}
+.badges { display: flex; gap: 10px; flex-wrap: wrap; }
+.badge {
+    background: #00bfa522;
+    border: 1px solid #00bfa544;
+    color: #00bfa5;
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 14px; font-weight: 600;
+}
+.author {
+    position: absolute; bottom: 40px; right: 60px;
+    font-size: 14px; color: #4a5578;
+}
+.author strong { color: #9fa8c4; }
+.github-icon {
+    position: absolute; top: 40px; right: 60px;
+    font-size: 14px; color: #4a5578;
+}
+</style></head>
+<body>
+<div class="slide">
+    <div class="content">
+        <div class="category">Security</div>
+        <h1><span>NETWORKING</span></h1>
+        <p class="desc">Prime AI NETWORKING — Dashboard, Cyber Radar, Games</p>
+        <div class="badges"><span class="badge">Dashboard</span><span class="badge">Cyber</span><span class="badge">Networking</span></div>
+    </div>
+    <div class="github-icon">github.com/Yacinewhatchandcode/NETWORKING</div>
+    <div class="author"><strong>Yacine Benhamou</strong> | yace19ai.com</div>
+</div>
+</body></html>

@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.env
+node_modules/
+.venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db
+*.zip
+*.jpeg
+*.jpg
+*.png
+!web/*.png
+!web/*.svg
+.gemini/

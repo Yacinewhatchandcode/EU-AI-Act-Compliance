@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f1117">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AI Act">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#0f1117">
+    <meta name="description"
+        content="EU AI Act Compliance — Classifiez, auditez et documentez vos systèmes IA. Règlement (EU) 2024/1689.">
+    <title>EU AI Act — PRIME.AI</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <!-- ═══ SPLASH SCREEN ═══ -->
+    <div class="splash" id="splash">
+        <div class="splash-logo">🇪🇺</div>
+        <div class="splash-title">EU AI Act</div>
+        <div class="splash-sub">COMPLIANCE SYSTEM</div>
+        <div class="splash-bar">
+            <div class="splash-fill"></div>
+        </div>
+    </div>
+
+    <!-- ═══ INSTALL BANNER ═══ -->
+    <div class="install-banner" id="installBanner" style="display:none">
+        <span>📲 Installer l'app sur votre téléphone</span>
+        <button class="install-btn" id="installBtn">Installer</button>
+        <button class="install-close" id="installClose">✕</button>
+    </div>
+
+    <!-- ═══ APP SHELL ═══ -->
+    <div class="app">
+
+        <!-- ═══════ HOME ═══════ -->
+        <section class="screen active" id="screen-home">
+            <div class="screen-scroll">
+                <header class="home-header">
+                    <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+                        <div class="home-logo">🇪🇺</div>
+                        <div class="user-info" id="userInfo" style="display:none" onclick="logout()">
+                            <span class="user-name"></span>
+                            <span class="user-logout">🚪</span>
+                        </div>
+                    </div>
+                    <h1>EU AI Act</h1>
+                    <p class="home-sub">Universal AI Compliance Scanner</p>
+                </header>
+
+                <!-- Countdown -->
+                <div class="countdown-card">
+                    <div class="countdown-label">⏰ Deadline conformité complète</div>
+                    <div class="countdown-row">
+                        <div class="cd-item"><span class="cd-val" id="cdDays">--</span><span class="cd-unit">j</span>
+                        </div>
+                        <div class="cd-sep">:</div>
+                        <div class="cd-item"><span class="cd-val" id="cdHours">--</span><span class="cd-unit">h</span>
+                        </div>
+                        <div class="cd-sep">:</div>
+                        <div class="cd-item"><span class="cd-val" id="cdMin">--</span><span class="cd-unit">m</span>
+                        </div>
+                        <div class="cd-sep">:</div>
+                        <div class="cd-item"><span class="cd-val" id="cdSec">--</span><span class="cd-unit">s</span>
+                        </div>
+                    </div>
+                    <div class="cd-date">2 Août 2026</div>
+                    <div class="cd-bar">
+                        <div class="cd-fill" id="cdFill"></div>
+                    </div>
+                </div>
+
+                <!-- Actions Grid -->
+                <div class="actions-grid">
+                    <button class="action-card ac-scan ripple" onclick="go('scan')">
+                        <span class="ac-icon">🌐</span>
+                        <span class="ac-title">Scanner</span>
+                        <span class="ac-desc">Any URL/App</span>
+                    </button>
+                    <button class="action-card ac-classify ripple" onclick="go('classify')">
+                        <span class="ac-icon">🏷️</span>
+                        <span class="ac-title">Classifier</span>
+                        <span class="ac-desc">Risk Level</span>
+                    </button>
+                    <button class="action-card ac-audit ripple" onclick="go('audit')">
+                        <span class="ac-icon">🔍</span>
+                        <span class="ac-title">Auditer</span>
+                        <span class="ac-desc">9 Requirements</span>
+                    </button>
+                    <button class="action-card ac-report ripple" onclick="go('report')">
+                        <span class="ac-icon">📄</span>
+                        <span class="ac-title">Report</span>
+                        <span class="ac-desc">Documentation</span>
+                    </button>
+                    <button class="action-card ac-roadmap ripple" onclick="go('roadmap')">
+                        <span class="ac-icon">🗺️</span>
+                        <span class="ac-title">Roadmap</span>
+                        <span class="ac-desc">Action Plan</span>
+                    </button>
+                    <button class="action-card ac-kb ripple" onclick="go('kb')">
+                        <span class="ac-icon">📚</span>
+                        <span class="ac-title">Knowledge</span>
+                        <span class="ac-desc">Full Regulation</span>
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-row">
+                    <div class="stat"><span class="stat-n" style="color:var(--red)">8</span><span
+                            class="stat-l">Interdits</span></div>
+                    <div class="stat"><span class="stat-n" style="color:var(--orange)">8</span><span class="stat-l">Haut
+                            risque</span></div>
+                    <div class="stat"><span class="stat-n" style="color:var(--primary)">9</span><span
+                            class="stat-l">Exigences</span></div>
+                    <div class="stat"><span class="stat-n" style="color:var(--purple)">5</span><span
+                            class="stat-l">Agents</span></div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="card">
+                    <h2>📅 Jalons réglementaires</h2>
+                    <div class="tl-item tl-done">
+                        <div class="tl-dot"></div>
+                        <div class="tl-txt"><b>Fév 2025</b> — Interdictions (Art. 5) en vigueur</div>
+                    </div>
+                    <div class="tl-item tl-done">
+                        <div class="tl-dot"></div>
+                        <div class="tl-txt"><b>Août 2025</b> — Règles GPAI applicables</div>
+                    </div>
+                    <div class="tl-item tl-next">
+                        <div class="tl-dot"></div>
+                        <div class="tl-txt"><b>Août 2026</b> — Obligation haut risque effective</div>
+                    </div>
+                    <div class="tl-item tl-future">
+                        <div class="tl-dot"></div>
+                        <div class="tl-txt"><b>Août 2027</b> — Produits Annexe I</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ URL SCANNER ═══════ -->
+        <section class="screen" id="screen-scan">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>🌐 URL Scanner</h2>
+                </div>
+                <div class="card">
+                    <label class="field-label">Enter any website URL to scan</label>
+                    <input type="url" id="scanUrl" class="field-input" placeholder="https://example.com"
+                        onkeydown="if(event.key==='Enter')doScan()">
+                    <div class="quick-chips">
+                        <button class="chip" onclick="fillScanUrl('https://openai.com')">🤖 OpenAI</button>
+                        <button class="chip" onclick="fillScanUrl('https://stripe.com')">💳 Stripe</button>
+                        <button class="chip" onclick="fillScanUrl('https://linkedin.com')">💼 LinkedIn</button>
+                        <button class="chip" onclick="fillScanUrl('https://huggingface.co')">🤗 HuggingFace</button>
+                        <button class="chip" onclick="fillScanUrl('https://amazon.com')">📦 Amazon</button>
+                        <button class="chip" onclick="fillScanUrl('https://google.com')">🔍 Google</button>
+                    </div>
+                    <button class="btn-main ripple" onclick="doScan()">🚀 Scan for AI Compliance</button>
+                </div>
+                <div id="scanResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ CLASSIFY ═══════ -->
+        <section class="screen" id="screen-classify">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>🏷️ Classifier</h2>
+                </div>
+                <div class="card">
+                    <label class="field-label">Décrivez votre système IA</label>
+                    <textarea id="classifyInput" class="field-textarea" rows="4"
+                        placeholder="Ex: IA qui trie les CV des candidats et prend des décisions d'embauche..."></textarea>
+                    <div class="quick-chips">
+                        <button class="chip" onclick="fillClassify('AI chatbot for customer service')">💬
+                            Chatbot</button>
+                        <button class="chip"
+                            onclick="fillClassify('AI system that screens CVs and makes hiring decisions')">👔
+                            Recrutement</button>
+                        <button class="chip" onclick="fillClassify('Social scoring system rating citizens')">⛔ Scoring
+                            social</button>
+                        <button class="chip" onclick="fillClassify('AI credit scoring for loan applications')">💳
+                            Crédit</button>
+                        <button class="chip" onclick="fillClassify('Emotion recognition in workplace')">😤
+                            Émotions</button>
+                        <button class="chip" onclick="fillClassify('AI spam filter for emails')">📧 Filtre spam</button>
+                    </div>
+                    <button class="btn-main ripple" id="classifyBtn" onclick="doClassify()">🔍 Classifier le
+                        système</button>
+                </div>
+                <div id="classifyResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ AUDIT ═══════ -->
+        <section class="screen" id="screen-audit">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>🔍 Audit de conformité</h2>
+                </div>
+                <div class="card">
+                    <label class="field-label">Nom du système IA</label>
+                    <input type="text" id="auditName" class="field-input" placeholder="Ex: MonIA Recrutement v2.1">
+                </div>
+                <div class="card">
+                    <h3>Les 9 exigences (Art. 8-15)</h3>
+                    <div id="auditList"></div>
+                    <button class="btn-main ripple" onclick="doAudit()">🔍 Lancer l'audit</button>
+                </div>
+                <div id="auditResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ REPORT ═══════ -->
+        <section class="screen" id="screen-report">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>📄 Rapport</h2>
+                </div>
+                <div class="card">
+                    <label class="field-label">Nom du système</label>
+                    <input type="text" id="reportName" class="field-input" placeholder="MonIA Recrutement">
+                    <label class="field-label" style="margin-top:12px">Description</label>
+                    <textarea id="reportDesc" class="field-textarea" rows="3"
+                        placeholder="Décrivez le système..."></textarea>
+                    <button class="btn-main ripple" onclick="doReport()">📄 Générer le rapport</button>
+                </div>
+                <div id="reportResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ ROADMAP ═══════ -->
+        <section class="screen" id="screen-roadmap">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>🗺️ Roadmap</h2>
+                </div>
+                <div class="card">
+                    <label class="field-label">Nom du système</label>
+                    <input type="text" id="roadmapName" class="field-input" placeholder="MonIA Recrutement">
+                    <button class="btn-main ripple" onclick="doRoadmap()">🗺️ Générer la roadmap</button>
+                </div>
+                <div id="roadmapResult"></div>
+            </div>
+        </section>
+
+        <!-- ═══════ KNOWLEDGE BASE ═══════ -->
+        <section class="screen" id="screen-kb">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>📚 Règlement</h2>
+                </div>
+                <div class="card">
+                    <input type="text" id="kbSearch" class="field-input"
+                        placeholder="🔍 Rechercher (ex: Article 6, hiring...)"
+                        onkeydown="if(event.key==='Enter')doSearch()">
+                    <button class="btn-main btn-sm ripple" onclick="doSearch()">Rechercher</button>
+                </div>
+                <div id="kbResults"></div>
+                <div id="kbDefault">
+                    <div class="card">
+                        <h3>🔴 Pratiques interdites — Art. 5</h3>
+                        <div id="kbP"></div>
+                    </div>
+                    <div class="card">
+                        <h3>🟠 Haut risque — Annexe III</h3>
+                        <div id="kbH"></div>
+                    </div>
+                    <div class="card">
+                        <h3>📋 Exigences (Art. 8-15)</h3>
+                        <div id="kbR"></div>
+                    </div>
+                    <div class="card">
+                        <h3>💰 Sanctions</h3>
+                        <div class="penalty-row">
+                            <div class="penalty penalty-red"><span class="pen-val">€35M</span><span class="pen-pct">7%
+                                    CA</span><span class="pen-lab">Interdit</span></div>
+                            <div class="penalty penalty-orange"><span class="pen-val">€15M</span><span
+                                    class="pen-pct">3% CA</span><span class="pen-lab">Haut risque</span></div>
+                            <div class="penalty penalty-yellow"><span class="pen-val">€7.5M</span><span
+                                    class="pen-pct">1% CA</span><span class="pen-lab">Info fausse</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════ AGENTS ═══════ -->
+        <section class="screen" id="screen-agents">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>🤖 Agents IA</h2>
+                </div>
+                <div class="agent-list">
+                    <div class="agent-item">
+                        <div class="ag-icon">🎯</div>
+                        <div class="ag-info"><b>Orchestrateur</b><span class="ag-id">main</span>
+                            <p>Route les messages WhatsApp vers les agents spécialisés</p>
+                        </div>
+                        <div class="ag-dot"></div>
+                    </div>
+                    <div class="agent-item">
+                        <div class="ag-icon">📚</div>
+                        <div class="ag-info"><b>Expert réglementaire</b><span class="ag-id">regulatory</span>
+                            <p>99 articles, RGPD, NIS2, cross-références</p>
+                        </div>
+                        <div class="ag-dot"></div>
+                    </div>
+                    <div class="agent-item">
+                        <div class="ag-icon">🏷️</div>
+                        <div class="ag-info"><b>Classificateur</b><span class="ag-id">classifier</span>
+                            <p>4 niveaux de risque, 8 catégories Art. 5 & Annexe III</p>
+                        </div>
+                        <div class="ag-dot"></div>
+                    </div>
+                    <div class="agent-item">
+                        <div class="ag-icon">🔍</div>
+                        <div class="ag-info"><b>Auditeur</b><span class="ag-id">auditor</span>
+                            <p>9 exigences, scoring pondéré, plan de remédiation</p>
+                        </div>
+                        <div class="ag-dot"></div>
+                    </div>
+                    <div class="agent-item">
+                        <div class="ag-icon">📊</div>
+                        <div class="ag-info"><b>Rapporteur</b><span class="ag-id">reporter</span>
+                            <p>Rapports, templates documentation, roadmaps, CE</p>
+                        </div>
+                        <div class="ag-dot"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>🏗️ Architecture</h3>
+                    <div class="arch">
+                        <div class="arch-box arch-in">📱 WhatsApp · 🌐 Web · ⌨️ CLI</div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-box arch-orch">🎯 Orchestrateur (OpenClaw)</div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-box arch-ag">📚 regulatory · 🏷️ classifier · 🔍 auditor · 📊 reporter</div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-box arch-tool">🐍 eu_ai_act.py · 🧠 DeepSeek V3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ═══ BOTTOM NAV ═══ -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" onclick="go('home')" data-screen="home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="go('scan')" data-screen="scan">
+            <span class="nav-icon">🌐</span>
+            <span class="nav-label">Scanner</span>
+        </button>
+        <button class="nav-item" onclick="go('classify')" data-screen="classify">
+            <span class="nav-icon">🏷️</span>
+            <span class="nav-label">Classify</span>
+        </button>
+        <button class="nav-item" onclick="go('audit')" data-screen="audit">
+            <span class="nav-icon">🔍</span>
+            <span class="nav-label">Audit</span>
+        </button>
+        <button class="nav-item" onclick="go('kb')" data-screen="kb">
+            <span class="nav-icon">📚</span>
+            <span class="nav-label">Knowledge</span>
+        </button>
+    </nav>
+
+    <!-- ═══ SNACKBAR ═══ -->
+    <div id="snackbar" class="snackbar" style="display:none"></div>
+
+    <script src="/app.js"></script>
+</body>
+
+</html>

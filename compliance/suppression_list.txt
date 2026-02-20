@@ -1,0 +1,8 @@
+# GDPR Email Suppression List
+# One email per line — check before EVERY campaign send
+# People who opted out or requested deletion
+#
+# Usage in email_campaign.py:
+#   suppression = open('compliance/suppression_list.txt').read().splitlines()
+#   if prospect_email in suppression: skip
+#
