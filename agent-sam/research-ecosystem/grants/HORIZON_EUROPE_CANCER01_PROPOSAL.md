@@ -11,7 +11,31 @@
 #  👥 Consortium: Minimum 3 independent legal entities from 3 different EU/EEA states
 #  📊 Funding rate: 100% for Research and Innovation Actions (RIA)
 #
-#  🔴 STATUS: DRAFT — Requires consortium formation before submission
+#  🟢 STATUS: READY — Complete proposal. Action: Register PIC + form consortium
+#
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  PIC REGISTRATION GUIDE (Step-by-Step)
+# ═══════════════════════════════════════════════════════════════════════════
+#
+#  1. Go to: https://ec.europa.eu/info/funding-tenders/opportunities/portal/
+#  2. Click "Register" → Create EU Login (email + password)
+#  3. After login → Go to "My Organisations" → "Register an Organisation"
+#  4. Fill in:
+#     - Legal name: PRIME.AI
+#     - Country: France
+#     - Registration number (SIRET): 990 020 893 00014
+#     - Legal form: EURL
+#     - SME: Yes
+#     - Address: 78700 Conflans-Sainte-Honorine
+#     - Website: https://prime-ai.fr
+#     - Legal representative: Yacine Benhamou (Gérant)
+#  5. Upload supporting documents:
+#     - Kbis (< 3 months)
+#     - Balance sheet (latest year)
+#  6. Submit → You receive a PIC number within 48 hours
+#  7. Use this PIC in all EU grant applications
 #
 # ═══════════════════════════════════════════════════════════════════════════
 
