@@ -1,0 +1,19 @@
+{
+    "name": "prism-onco",
+    "version": "1.0.0",
+    "description": "PRISM-Onco — Prime Research Intelligence System for Multi-Agent Oncology",
+    "type": "module",
+    "main": "prism-onco.js",
+    "scripts": {
+        "start": "node prism-onco.js",
+        "agents": "node prism-onco.js agents",
+        "run": "node prism-onco.js run",
+        "run:breast": "node prism-onco.js run \"HER2+ Breast Cancer\" \"TCGA-BRCA-A7-A0DA\"",
+        "run:lung": "node prism-onco.js run \"NSCLC EGFR-mutated\" \"TCGA-LUAD-55-7907\"",
+        "run:pancreatic": "node prism-onco.js run \"Pancreatic Ductal Adenocarcinoma\" \"TCGA-PAAD-FB-A4P5\"",
+        "grants": "node prism-onco.js grants",
+        "seo": "node prism-onco.js seo"
+    },
+    "author": "Yacine Benhamou <yacine@prime-ai.fr>",
+    "license": "EUPL-1.2"
+}

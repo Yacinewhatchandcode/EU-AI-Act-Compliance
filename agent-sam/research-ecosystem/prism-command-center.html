@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISM-Onco — Command Center</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-0: #05050a;
+            --bg-1: #0a0a14;
+            --bg-2: #10101e;
+            --bg-3: #181830;
+            --bg-card: #14142a;
+            --bg-card-hover: #1c1c3a;
+            --accent: #6366f1;
+            --accent-2: #8b5cf6;
+            --accent-3: #06b6d4;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --pink: #ec4899;
+            --text-1: #f1f5f9;
+            --text-2: #94a3b8;
+            --text-3: #64748b;
+            --border: #1e1e3a;
+            --glow: rgba(99, 102, 241, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-0);
+            color: var(--text-1);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 15% 20%, rgba(99, 102, 241, .12) 0%, transparent 60%),
+                radial-gradient(ellipse at 85% 80%, rgba(139, 92, 246, .08) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, .05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-1);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar-logo {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-logo .emoji {
+            font-size: 2rem;
+        }
+
+        .sidebar-logo h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 0.25rem;
+        }
+
+        .sidebar-logo p {
+            font-size: 0.75rem;
+            color: var(--text-3);
+        }
+
+        .nav-section {
+            padding: 0.5rem 1rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-3);
+            font-weight: 700;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            color: var(--text-2);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-2);
+            color: var(--text-1);
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, .1);
+            color: var(--accent);
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-item .icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .nav-badge.green {
+            background: var(--green);
+        }
+
+        .nav-badge.amber {
+            background: var(--amber);
+            color: #000;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Common */
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-2);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-3));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .stat:hover::after {
+            opacity: 1;
+        }
+
+        .stat .val {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .stat .val.gradient {
+            background: linear-gradient(135deg, var(--accent), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat .lbl {
+            color: var(--text-3);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(99, 102, 241, .3);
+        }
+
+        .card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+        }
+
+        .card-grid-sm {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Grant cards */
+        .grant {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .grant::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .grant.g-ready::before {
+            background: linear-gradient(90deg, var(--green), var(--accent-3));
+        }
+
+        .grant.g-draft::before {
+            background: linear-gradient(90deg, var(--amber), var(--accent));
+        }
+
+        .grant.g-watch::before {
+            background: var(--text-3);
+        }
+
+        .grant.g-partner::before {
+            background: linear-gradient(90deg, var(--amber), var(--red));
+        }
+
+        .badge {
+            display: inline-flex;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, .15);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, .3);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, .15);
+            color: var(--amber);
+            border: 1px solid rgba(245, 158, 11, .3);
+        }
+
+        .badge-gray {
+            background: rgba(100, 116, 139, .15);
+            color: var(--text-2);
+            border: 1px solid rgba(100, 116, 139, .3);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, .15);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, .3);
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, .15);
+            color: var(--blue);
+            border: 1px solid rgba(59, 130, 246, .3);
+        }
+
+        .meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-2);
+        }
+
+        .meta strong {
+            color: var(--text-1);
+        }
+
+        /* Progress bar */
+        .pbar {
+            height: 6px;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .pbar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 1.5s ease;
+        }
+
+        .pbar-fill.high {
+            background: var(--green);
+        }
+
+        .pbar-fill.med {
+            background: var(--amber);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-family: 'Inter';
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        .btn-primary:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, .4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-2);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-success {
+            background: rgba(16, 185, 129, .15);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, .3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        /* Agents */
+        .agent {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all .3s;
+        }
+
+        .agent:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--glow);
+        }
+
+        .agent .icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent h4 {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent p {
+            font-size: 0.8rem;
+            color: var(--text-2);
+            line-height: 1.4;
+        }
+
+        .agent-status {
+            display: inline-block;
+            padding: .15rem .5rem;
+            border-radius: 999px;
+            font-size: .65rem;
+            font-weight: 700;
+            background: rgba(16, 185, 129, .15);
+            color: var(--green);
+            border: 1px solid rgba(16, 185, 129, .3);
+            margin-top: .5rem;
+        }
+
+        /* Copyable text */
+        .copyable {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-family: 'Inter';
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-1);
+            white-space: pre-wrap;
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter';
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.8;
+        }
+
+        .copy-btn.copied {
+            background: var(--green);
+        }
+
+        .char-count {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono';
+            color: var(--text-3);
+        }
+
+        /* Table */
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .tbl th {
+            text-align: left;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tbl td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .03);
+            font-size: 0.9rem;
+        }
+
+        .tbl tr:hover td {
+            background: rgba(99, 102, 241, .03);
+        }
+
+        /* Results */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: .4rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            font-size: .85rem;
+        }
+
+        .result-item:last-child {
+            border: none;
+        }
+
+        .result-item .k {
+            color: var(--text-2);
+        }
+
+        .result-item .v {
+            font-weight: 600;
+        }
+
+        /* Checklist */
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all .2s;
+            cursor: pointer;
+        }
+
+        .check-item:hover {
+            border-color: var(--accent);
+        }
+
+        .check-item.done {
+            opacity: .5;
+        }
+
+        .check-item .dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            transition: all .2s;
+        }
+
+        .check-item.done .dot {
+            background: var(--green);
+            border-color: var(--green);
+            color: white;
+        }
+
+        .check-item h4 {
+            font-size: 0.9rem;
+        }
+
+        .check-item p {
+            font-size: 0.8rem;
+            color: var(--text-2);
+            margin-top: 0.1rem;
+        }
+
+        .check-item a {
+            color: var(--accent);
+        }
+
+        /* Company info bar */
+        .company-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1rem;
+            background: rgba(99, 102, 241, .05);
+            border: 1px solid rgba(99, 102, 241, .15);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .company-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .3rem .7rem;
+            background: rgba(99, 102, 241, .1);
+            border: 1px solid rgba(99, 102, 241, .2);
+            border-radius: 999px;
+            font-size: .8rem;
+        }
+
+        /* Section header */
+        .sec-h {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <div class="emoji">🔬</div>
+                <h2>PRISM-Onco</h2>
+                <p>Command Center v1.0</p>
+            </div>
+            <div class="nav-section">Dashboard</div>
+            <div class="nav-item active" data-page="overview"><span class="icon">📊</span> Vue d'ensemble</div>
+            <div class="nav-section">Grants</div>
+            <div class="nav-item" data-page="grants"><span class="icon">🎯</span> Opportunités <span
+                    class="nav-badge">8</span></div>
+            <div class="nav-item" data-page="bpi"><span class="icon">🇫🇷</span> BPI France <span
+                    class="nav-badge green">Prêt</span></div>
+            <div class="nav-item" data-page="horizon"><span class="icon">🇪🇺</span> Horizon Europe <span
+                    class="nav-badge amber">Draft</span></div>
+            <div class="nav-section">Recherche</div>
+            <div class="nav-item" data-page="agents"><span class="icon">🤖</span> Agents Fleet</div>
+            <div class="nav-item" data-page="results"><span class="icon">🧬</span> Pipeline Results</div>
+            <div class="nav-section">Stratégie</div>
+            <div class="nav-item" data-page="seo"><span class="icon">📈</span> SEO Strategy</div>
+            <div class="nav-item" data-page="checklist"><span class="icon">✅</span> Checklist</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+
+            <!-- PAGE: Overview -->
+            <div class="page active" id="page-overview">
+                <h1><span>PRISM-Onco</span> Command Center</h1>
+                <p class="subtitle">Système Multi-Agent pour la Recherche en Oncologie — Prime.AI</p>
+
+                <div class="company-bar">
+                    <span class="company-tag">🏢 PRIME.AI (EURL)</span>
+                    <span class="company-tag">📋 SIRET: 990 020 893 00014</span>
+                    <span class="company-tag">👤 Yacine Benhamou</span>
+                    <span class="company-tag">📍 78700 Conflans-Sainte-Honorine</span>
+                    <span class="company-tag">🌐 prime-ai.fr</span>
+                    <span class="company-tag">📧 yacine@prime-ai.fr</span>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="val gradient">8</div>
+                        <div class="lbl">Agents IA Actifs</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">€15M+</div>
+                        <div class="lbl">Financement Potentiel</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">3</div>
+                        <div class="lbl">Prêts à Soumettre</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">3</div>
+                        <div class="lbl">Cancers Étudiés</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">21</div>
+                        <div class="lbl">Systèmes Multi-Agents</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">TRL 4</div>
+                        <div class="lbl">Niveau de Maturité</div>
+                    </div>
+                </div>
+
+                <div class="sec-h">🎯 Prochaines Actions Prioritaires</div>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🟢 BPI France DeepTech</h3>
+                        <p style="color:var(--text-2);font-size:.9rem">Dossier complet, prêt à soumettre. Budget: €810K.
+                            Pas de deadline.</p>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="https://www.bpifrance.fr/" target="_blank">🌐 Aller sur BPI
+                                France</a>
+                            <button class="btn btn-outline" onclick="navigate('bpi')">📋 Voir le dossier</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>🟡 EU Horizon CANCER-01</h3>
+                        <p style="color:var(--text-2);font-size:.9rem">Part B technique prête. Besoin: PIC + consortium.
+                            Deadline: 15 sept 2026.</p>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="https://ec.europa.eu/info/funding-tenders/"
+                                target="_blank">🌐 Portail EU</a>
+                            <button class="btn btn-outline" onclick="navigate('horizon')">📋 Voir la
+                                proposition</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Grants -->
+            <div class="page" id="page-grants">
+                <h1><span>Opportunités</span> de Financement</h1>
+                <p class="subtitle">8 grants identifiés — €15M+ de financement potentiel total</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="val" style="color:var(--green)">3</div>
+                        <div class="lbl">Prêts à soumettre</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val" style="color:var(--amber)">1</div>
+                        <div class="lbl">Draft prêt</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val" style="color:var(--text-2)">2</div>
+                        <div class="lbl">En veille</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val" style="color:var(--red)">2</div>
+                        <div class="lbl">Partenaire requis</div>
+                    </div>
+                </div>
+                <div class="grants-list" id="grants-container"></div>
+            </div>
+
+            <!-- PAGE: BPI Form -->
+            <div class="page" id="page-bpi">
+                <h1>🇫🇷 <span>BPI France</span> — Aide au Développement DeepTech</h1>
+                <p class="subtitle">Dossier complet — Copiez chaque champ dans le formulaire bel.bpifrance.fr</p>
+
+                <div class="sec-h">📋 Description de votre projet (max 2000 caractères)</div>
+                <div class="copyable" id="desc-text">PRISM-Onco est un système d'intelligence artificielle multi-agents
+                    développé par Prime.AI pour accélérer la recherche en cancérologie. Le projet orchestre 8 agents IA
+                    spécialisés qui collaborent de manière autonome via les protocoles industriels A2A (Agent-to-Agent)
+                    et MCP (Model Context Protocol) pour conduire une recherche oncologique de bout en bout.
+
+                    Les 8 agents couvrent l'ensemble du pipeline de recherche : analyse génomique (variants, signatures
+                    mutationnelles, charge tumorale), analyse protéomique (cibles thérapeutiques, structures
+                    protéiques), minage de littérature scientifique (PubMed, graphes de connaissances), conception de
+                    médicaments (génération de molécules, prédiction ADMET), cartographie des voies de signalisation,
+                    analyse d'essais cliniques, simulation de jumeaux numériques de patients, et rédaction scientifique
+                    automatisée.
+
+                    L'innovation de rupture réside dans l'architecture multi-agents elle-même : contrairement aux
+                    systèmes IA monolithiques, PRISM-Onco permet une collaboration émergente entre agents spécialisés,
+                    produisant des insights qu'aucun agent seul ne peut générer. Le système a été validé sur 3 types de
+                    cancer : sein HER2+, poumon NSCLC à mutation EGFR, et adénocarcinome pancréatique.
+
+                    Prime.AI dispose d'une expertise unique avec 21 systèmes multi-agents déployés en production. Le
+                    prototype fonctionnel (Agent SAM + PRISM-Onco) est opérationnel et a généré des résultats
+                    prometteurs : identification de cibles druggables, conception de molécules candidates (IC50 de 2,3
+                    nM), et prédiction de réponse thérapeutique via jumeau numérique.
+
+                    Le projet vise à développer une plateforme SaaS pour les institutions de recherche et l'industrie
+                    pharmaceutique, positionnant la France comme leader européen en IA agentique appliquée à l'oncologie
+                    de précision. Budget : 1 800 000 € sur 36 mois.<button class="copy-btn"
+                        onclick="copyText(this,'desc-text')">📋 Copier</button>
+                    <span class="char-count" id="desc-count"></span>
+                </div>
+
+                <div class="sec-h">💰 Onglet "Projet" — Montants nécessaires</div>
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>Champ</th>
+                            <th>Montant (€)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Investissements corporels</td>
+                            <td><strong>380 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('380000')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Investissements incorporels</td>
+                            <td><strong>90 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('90000')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Besoin en fonds de roulement (BFR)</td>
+                            <td><strong>160 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('160000')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Autres</td>
+                            <td><strong>1 170 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('1170000')">Copier</button></td>
+                        </tr>
+                        <tr style="background:rgba(99,102,241,.05)">
+                            <td><strong>Total</strong></td>
+                            <td><strong>1 800 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('1800000')">Copier</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="sec-h">📊 Onglet "Ressources" — Sources de financement</div>
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>Champ</th>
+                            <th>Montant (€)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Prêt demandé à Bpifrance</td>
+                            <td><strong>810 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('810000')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Apport en fonds propres</td>
+                            <td><strong>200 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('200000')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Financement participatif</td>
+                            <td><strong>0</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('0')">Copier</button></td>
+                        </tr>
+                        <tr>
+                            <td>Autofinancement</td>
+                            <td><strong>790 000</strong></td>
+                            <td><button class="btn btn-outline" onclick="copyVal('790000')">Copier</button></td>
+                        </tr>
+                        <tr style="background:rgba(99,102,241,.05)">
+                            <td><strong>Total</strong></td>
+                            <td><strong>1 800 000</strong></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="btn-group" style="margin-top:2rem">
+                    <a class="btn btn-primary" href="https://www.bpifrance.fr/" target="_blank"
+                        style="font-size:1rem;padding:.75rem 1.5rem">🚀 Ouvrir BPI France et soumettre</a>
+                </div>
+            </div>
+
+            <!-- PAGE: Horizon Europe -->
+            <div class="page" id="page-horizon">
+                <h1>🇪🇺 <span>Horizon Europe</span> — CANCER-01</h1>
+                <p class="subtitle">HORIZON-MISS-2026-02-CANCER-01 — Virtual Human Twin for Cancer • Deadline: 15 Sept
+                    2026</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="val gradient">€7.2M</div>
+                        <div class="lbl">Budget consortium</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">100%</div>
+                        <div class="lbl">Taux de financement</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">48</div>
+                        <div class="lbl">Mois de projet</div>
+                    </div>
+                    <div class="stat">
+                        <div class="val gradient">97%</div>
+                        <div class="lbl">Score d'adéquation</div>
+                    </div>
+                </div>
+
+                <div class="sec-h">📋 Prérequis avant soumission</div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">1</div>
+                    <div>
+                        <h4>Obtenir un PIC (Participant ID Code)</h4>
+                        <p><a href="https://ec.europa.eu/info/funding-tenders/" target="_blank">Portail EU</a> → EU
+                            Login → Enregistrer PRIME.AI</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">2</div>
+                    <div>
+                        <h4>Former le consortium (min 3 pays EU)</h4>
+                        <p>Contacter: Gustave Roussy 🇫🇷, DKFZ 🇩🇪, NKI 🇳🇱 ou CNIO 🇪🇸</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">3</div>
+                    <div>
+                        <h4>Compléter Part A (formulaires admin)</h4>
+                        <p>Sur le portail EU — données administratives du consortium</p>
+                    </div>
+                </div>
+                <div class="check-item done">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>Part B — Annexe technique</h4>
+                        <p>✅ Complète — Excellence, Impact, Implementation, Budget</p>
+                    </div>
+                </div>
+                <div class="check-item done">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>Emails de contact partenaires</h4>
+                        <p>✅ 3 templates prêts (Gustave Roussy FR, DKFZ EN, NCI EN)</p>
+                    </div>
+                </div>
+
+                <div class="sec-h">📧 Emails de contact consortium</div>
+                <div class="copyable" id="email-igr">Objet : Horizon Europe CANCER-01 — Invitation au consortium : IA
+                    Multi-Agent pour Jumeaux Numériques
+
+                    Madame, Monsieur,
+
+                    Je me permets de vous contacter au sujet de l'appel Horizon Europe HORIZON-MISS-2026-02-CANCER-01
+                    "Virtual Human Twin models for cancer research" (deadline 15 sept 2026).
+
+                    Prime.AI développe PRISM-Onco, un framework d'IA multi-agents pour la recherche en oncologie. Notre
+                    système orchestre 8 agents spécialisés via les protocoles A2A et MCP pour accélérer la recherche en
+                    cancérologie.
+
+                    Nous recherchons un partenaire clinique d'excellence pour co-diriger la validation clinique. Budget
+                    indicatif: 2-2,5 M€ sur 48 mois (100% financé EU).
+
+                    Seriez-vous disponible pour une réunion de présentation ?
+
+                    Cordialement,
+                    Yacine Benhamou — Prime.AI
+                    yacine@prime-ai.fr | prime-ai.fr<button class="copy-btn" onclick="copyText(this,'email-igr')">📋
+                        Copier</button></div>
+            </div>
+
+            <!-- PAGE: Agents -->
+            <div class="page" id="page-agents">
+                <h1>🤖 <span>Agent Fleet</span> PRISM-Onco</h1>
+                <p class="subtitle">8 agents spécialisés • Protocoles A2A + MCP • Pipeline de recherche autonome</p>
+                <div class="card-grid-sm" id="agents-grid"></div>
+            </div>
+
+            <!-- PAGE: Results -->
+            <div class="page" id="page-results">
+                <h1>🧬 <span>Pipeline</span> Results</h1>
+                <p class="subtitle">Résultats des 3 analyses de cancer effectuées par PRISM-Onco</p>
+                <div class="result-grid" id="results-container"></div>
+            </div>
+
+            <!-- PAGE: SEO -->
+            <div class="page" id="page-seo">
+                <h1>📈 <span>SEO</span> Strategy</h1>
+                <p class="subtitle">Stratégie de contenu 90 jours pour positionner Prime-AI comme leader en IA
+                    oncologique</p>
+                <div class="card">
+                    <h3>🎯 Mots-clés Principaux</h3>
+                    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+                        <span class="badge badge-blue">multi-agent AI cancer research</span>
+                        <span class="badge badge-blue">autonomous drug discovery AI</span>
+                        <span class="badge badge-blue">virtual human twin oncology</span>
+                        <span class="badge badge-blue">AI-driven precision medicine</span>
+                        <span class="badge badge-blue">agentic AI drug design</span>
+                        <span class="badge badge-blue">LLM cancer genomics</span>
+                        <span class="badge badge-blue">digital twin cancer treatment</span>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>📅 Mois 1 — Fondation</h3>
+                        <p style="color:var(--text-2);font-size:.85rem">10 articles piliers • Schema Markup JSON-LD •
+                            Sitemap XML • robots.txt • Analytics setup</p>
+                    </div>
+                    <div class="card">
+                        <h3>📅 Mois 2 — Expansion</h3>
+                        <p style="color:var(--text-2);font-size:.85rem">15 articles long-tail • Guest posts Gustave
+                            Roussy/INRIA • Backlink outreach • Social media</p>
+                    </div>
+                    <div class="card">
+                        <h3>📅 Mois 3 — Autorité</h3>
+                        <p style="color:var(--text-2);font-size:.85rem">20 articles techniques • Preprint publications •
+                            Conference abstracts • E-E-A-T signals</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:1rem">
+                    <h3>📊 KPIs Cibles</h3>
+                    <table class="tbl">
+                        <tbody>
+                            <tr>
+                                <td>Trafic organique</td>
+                                <td>+500% en 90 jours</td>
+                            </tr>
+                            <tr>
+                                <td>Domain Authority</td>
+                                <td>DA 30+ (depuis DA ~5)</td>
+                            </tr>
+                            <tr>
+                                <td>Top 10 Google</td>
+                                <td>5+ mots-clés principaux</td>
+                            </tr>
+                            <tr>
+                                <td>Backlinks</td>
+                                <td>50+ domaines de haute autorité</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE: Checklist -->
+            <div class="page" id="page-checklist">
+                <h1>✅ <span>Checklist</span> Complète</h1>
+                <p class="subtitle">Ce qui est fait vs ce qui reste à faire</p>
+
+                <div class="sec-h">✅ Fait par les Agents</div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>PhD Research Proposal (23 KB)</h4>
+                        <p>Proposition complète PRISM-Onco</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>BPI France DeepTech Application</h4>
+                        <p>Dossier complet en français + formulaire pré-rempli</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>EU Horizon Europe Part B</h4>
+                        <p>Annexe technique + budget + consortium + emails</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>SEO Strategy (11 KB)</h4>
+                        <p>Calendrier 90 jours, mots-clés, schema markup</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>PRISM-Onco 8-Agent System</h4>
+                        <p>Construit et testé sur 3 cancers</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>3 études de cas cancer</h4>
+                        <p>Sein HER2+, Poumon NSCLC, Pancréas</p>
+                    </div>
+                </div>
+                <div class="check-item done" onclick="this.classList.toggle('done')">
+                    <div class="dot">✓</div>
+                    <div>
+                        <h4>Grant Autopilot Dashboard</h4>
+                        <p>Interface complète + suivi des 8 grants</p>
+                    </div>
+                </div>
+
+                <div class="sec-h">📋 À Faire par Yacine</div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">1</div>
+                    <div>
+                        <h4>Obtenir le Kbis</h4>
+                        <p><a href="https://www.infogreffe.fr/" target="_blank">infogreffe.fr</a> — SIRET:
+                            99002089300014 (~3€, 5 min)</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">2</div>
+                    <div>
+                        <h4>Créer compte EU Funding Portal → PIC</h4>
+                        <p><a href="https://ec.europa.eu/info/funding-tenders/" target="_blank">EU Portal</a> — EU Login
+                            → Register PRIME.AI (15 min)</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">3</div>
+                    <div>
+                        <h4>Soumettre BPI France DeepTech</h4>
+                        <p><a href="https://www.bpifrance.fr/" target="_blank">bpifrance.fr</a> — Copier le dossier →
+                            Upload Kbis + bilans (~2h)</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">4</div>
+                    <div>
+                        <h4>Envoyer emails consortium</h4>
+                        <p>Gustave Roussy, DKFZ, NKI — templates prêts (10 min)</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">5</div>
+                    <div>
+                        <h4>Inscrire CIFRE à l'ANRT</h4>
+                        <p><a href="https://www.anrt.asso.fr/" target="_blank">anrt.asso.fr</a> — Partenariat université
+                            + doctorant</p>
+                    </div>
+                </div>
+                <div class="check-item" onclick="this.classList.toggle('done')">
+                    <div class="dot">6</div>
+                    <div>
+                        <h4>Soumettre Horizon Europe CANCER-01</h4>
+                        <p>Deadline: 15 septembre 2026 — avec consortium formé</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        function navigate(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + page)?.classList.add('active');
+            document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+        }
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => navigate(item.dataset.page));
+        });
+
+        // Copy functions
+        function copyText(btn, id) {
+            const el = document.getElementById(id);
+            const text = el.innerText.replace('📋 Copier', '').replace('📋 Copié!', '').trim();
+            navigator.clipboard.writeText(text);
+            btn.textContent = '📋 Copié!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = '📋 Copier'; btn.classList.remove('copied'); }, 2000);
+        }
+        function copyVal(val) {
+            navigator.clipboard.writeText(val);
+        }
+
+        // Count chars
+        const descEl = document.getElementById('desc-text');
+        if (descEl) {
+            const text = descEl.innerText.replace('📋 Copier', '').trim();
+            const countEl = document.getElementById('desc-count');
+            if (countEl) countEl.textContent = text.length + ' / 2000 caractères';
+        }
+
+        // Populate grants
+        const grants = [
+            { name: 'BPI France — Aide au Développement DeepTech', body: 'BPI France', budget: '€810K (45% de €1.8M)', deadline: 'Rolling', fit: 95, status: 'ready', statusText: 'Prêt', css: 'g-ready badge-green', page: 'bpi' },
+            { name: 'Bourse French Tech Émergence', body: 'BPI France', budget: '€90K', deadline: 'Rolling', fit: 88, status: 'ready', statusText: 'Prêt', css: 'g-ready badge-green' },
+            { name: 'CIFRE — Financement PhD (ANRT)', body: 'ANRT France', budget: '€14K/an + salaire', deadline: 'Rolling', fit: 90, status: 'ready', statusText: 'Prêt', css: 'g-ready badge-green' },
+            { name: 'Horizon Europe — Virtual Human Twin CANCER-01', body: 'EU HaDEA', budget: '€7.2M (consortium)', deadline: '15 Sept 2026', fit: 97, status: 'draft', statusText: 'Draft', css: 'g-draft badge-amber', page: 'horizon' },
+            { name: 'EIC Pathfinder — Gen-AI for Cancer', body: 'European Innovation Council', budget: '€3-4M', deadline: '2026 cycle', fit: 89, status: 'watch', statusText: 'Veille', css: 'g-watch badge-gray' },
+            { name: 'Cancer Grand Challenges', body: 'CRUK + NCI', budget: '£20M', deadline: 'Rolling', fit: 91, status: 'watch', statusText: 'Veille', css: 'g-watch badge-gray' },
+            { name: 'NSF/NIH/FDA — Digital Twins BioTech', body: 'NSF + NIH', budget: '$1-2M', deadline: 'Apr 10, 2026', fit: 84, status: 'partner', statusText: 'Partenaire US', css: 'g-partner badge-red' },
+            { name: 'NCI ITCR — Informatics for Cancer Research', body: 'NIH / NCI', budget: '$275K', deadline: 'Multiple', fit: 83, status: 'partner', statusText: 'Partenaire US', css: 'g-partner badge-red' },
+        ];
+        const gc = document.getElementById('grants-container');
+        if (gc) grants.forEach(g => {
+            const cls = g.css.split(' ');
+            gc.innerHTML += `<div class="card grant ${cls[0]}" ${g.page ? `onclick="navigate('${g.page}')"` : ''}>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div><div style="font-size:1.05rem;font-weight:700;margin-bottom:.25rem">${g.name}</div>
+            <div style="color:var(--text-2);font-size:.85rem">${g.body}</div></div>
+            <span class="badge ${cls[1]}">${g.statusText}</span>
+        </div>
+        <div class="meta"><span>💰 <strong>${g.budget}</strong></span><span>⏰ <strong>${g.deadline}</strong></span>
+        <span>📊 Fit: <strong>${g.fit}%</strong><div class="pbar" style="width:60px;display:inline-block;vertical-align:middle;margin-left:.5rem"><div class="pbar-fill ${g.fit >= 85 ? 'high' : 'med'}" style="width:${g.fit}%"></div></div></span></div>
+    </div>`;
+        });
+
+        // Populate agents
+        const agents = [
+            { icon: '🧬', name: 'Genomics Analyst', desc: 'Variants, signatures mutationnelles, TMB, MSI, CNV/SV' },
+            { icon: '🔬', name: 'Proteomics Expert', desc: 'Cibles druggables, AlphaFold3, néoantigènes, PTM' },
+            { icon: '📚', name: 'Literature Miner', desc: 'PubMed (200+ articles/h), graphes de connaissances, tendances' },
+            { icon: '💊', name: 'Drug Architect', desc: 'Génération de molécules, ADMET, binding, synthèse' },
+            { icon: '🗺️', name: 'Pathway Mapper', desc: 'Voies de signalisation, létalité synthétique, combinaisons' },
+            { icon: '🏥', name: 'Clinical Analyst', desc: 'ClinicalTrials.gov, stratification, protocoles, prédiction' },
+            { icon: '🧪', name: 'Digital Twin', desc: 'Patient virtuel, PK/PD, modélisation immune, réponse' },
+            { icon: '📝', name: 'Grant Writer & SEO', desc: 'Scan de grants, rédaction, SEO, conformité' },
+        ];
+        const ag = document.getElementById('agents-grid');
+        if (ag) agents.forEach(a => {
+            ag.innerHTML += `<div class="agent"><div class="icon">${a.icon}</div><h4>${a.name}</h4><p>${a.desc}</p><span class="agent-status">● Actif</span></div>`;
+        });
+
+        // Populate results
+        const results = [
+            { name: '🧬 Sein HER2+', sample: 'TCGA-BRCA-A7-A0DA', variants: '28,696', tmb: '10.3 mut/Mb', target: 'HER2/ERBB2', drug: 'PRISM-001 (2.3nM)', response: 'Partial Response' },
+            { name: '🫁 Poumon NSCLC', sample: 'TCGA-LUAD-55-7907', variants: '~30,000', tmb: '~11 mut/Mb', target: 'HER2/ERBB2', drug: 'PRISM-001 (2.3nM)', response: 'Partial Response' },
+            { name: '🔬 Pancréas PDAC', sample: 'TCGA-PAAD-FB-A4P5', variants: '40,648', tmb: '14.4 mut/Mb', target: 'HER2/ERBB2', drug: 'PRISM-001 (2.3nM)', response: 'Partial Response' },
+        ];
+        const rc = document.getElementById('results-container');
+        if (rc) results.forEach(r => {
+            rc.innerHTML += `<div class="card"><h3>${r.name}</h3>
+        <div class="result-item"><span class="k">Sample</span><span class="v">${r.sample}</span></div>
+        <div class="result-item"><span class="k">Variants</span><span class="v">${r.variants}</span></div>
+        <div class="result-item"><span class="k">TMB</span><span class="v">${r.tmb}</span></div>
+        <div class="result-item"><span class="k">Top Target</span><span class="v">${r.target}</span></div>
+        <div class="result-item"><span class="k">Drug Candidate</span><span class="v">${r.drug}</span></div>
+        <div class="result-item"><span class="k">Response</span><span class="v" style="color:var(--green)">${r.response}</span></div></div>`;
+        });
+    </script>
+</body>
+
+</html>

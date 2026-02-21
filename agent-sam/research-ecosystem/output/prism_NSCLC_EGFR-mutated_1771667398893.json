@@ -1,0 +1,500 @@
+{
+  "pipeline_id": "738d8488-8629-4422-a421-d3fc3d5901db",
+  "cancer_type": "NSCLC EGFR-mutated",
+  "sample_id": "TCGA-LUAD-55-7907",
+  "timestamp": "2026-02-21T09:49:58.893Z",
+  "agents_used": 7,
+  "tasks_completed": 10,
+  "key_findings": {
+    "variants": 11464,
+    "tmb": 5.3,
+    "top_target": "HER2/ERBB2",
+    "drug_candidate": "PRISM-001",
+    "binding_affinity": "2.3 nM",
+    "predicted_response": "Partial Response (PR)",
+    "matching_trials": 2,
+    "grant_opportunities": 5
+  },
+  "results": {
+    "genomics": {
+      "taskId": "63a1f012-f597-4971-b304-9660331ce6f8",
+      "agentId": "genomics-analyst",
+      "tool": "variant_call",
+      "result": {
+        "sample": "TCGA-LUAD-55-7907",
+        "genome": "GRCh38",
+        "variants_detected": 11464,
+        "snps": 8024,
+        "indels": 2292,
+        "structural": 1146,
+        "tmb_score": 5.3,
+        "msi_status": "MSS",
+        "actionable_mutations": [
+          {
+            "gene": "BRCA1",
+            "variant": "p.C61G",
+            "significance": "Pathogenic",
+            "drug": "Olaparib"
+          },
+          {
+            "gene": "TP53",
+            "variant": "p.R175H",
+            "significance": "Pathogenic",
+            "drug": "APR-246"
+          },
+          {
+            "gene": "PIK3CA",
+            "variant": "p.H1047R",
+            "significance": "Likely pathogenic",
+            "drug": "Alpelisib"
+          }
+        ]
+      },
+      "duration": 0
+    },
+    "signatures": {
+      "taskId": "e30c712b-6ce1-447c-9074-a0a876336168",
+      "agentId": "genomics-analyst",
+      "tool": "mutation_signature",
+      "result": {
+        "sample": "TCGA-LUAD-55-7907",
+        "dominant_signatures": [
+          {
+            "signature": "SBS1",
+            "contribution": 0.35,
+            "etiology": "Spontaneous deamination (age-related)"
+          },
+          {
+            "signature": "SBS5",
+            "contribution": 0.25,
+            "etiology": "Clock-like"
+          },
+          {
+            "signature": "SBS3",
+            "contribution": 0.2,
+            "etiology": "HR deficiency (BRCA1/2)"
+          },
+          {
+            "signature": "SBS13",
+            "contribution": 0.12,
+            "etiology": "APOBEC mutagenesis"
+          }
+        ],
+        "hr_deficiency_score": 42,
+        "recommendation": "Patient likely HRD-positive — consider PARP inhibitor therapy"
+      },
+      "duration": 0
+    },
+    "targets": {
+      "taskId": "43277083-b155-49df-8652-55f41eab72c0",
+      "agentId": "proteomics-expert",
+      "tool": "identify_targets",
+      "result": {
+        "cancer_type": "NSCLC EGFR-mutated",
+        "druggable_targets": [
+          {
+            "protein": "HER2/ERBB2",
+            "expression_fold": 12.3,
+            "druggability": 0.95,
+            "drugs": [
+              "Trastuzumab",
+              "Pertuzumab",
+              "T-DXd"
+            ]
+          },
+          {
+            "protein": "PD-L1/CD274",
+            "expression_fold": 4.7,
+            "druggability": 0.88,
+            "drugs": [
+              "Atezolizumab",
+              "Durvalumab"
+            ]
+          },
+          {
+            "protein": "VEGFR2/KDR",
+            "expression_fold": 3.2,
+            "druggability": 0.82,
+            "drugs": [
+              "Bevacizumab",
+              "Ramucirumab"
+            ]
+          },
+          {
+            "protein": "mTOR",
+            "expression_fold": 2.8,
+            "druggability": 0.78,
+            "drugs": [
+              "Everolimus",
+              "Temsirolimus"
+            ]
+          }
+        ],
+        "neoantigens": [
+          {
+            "peptide": "KRAS_G12D_9mer",
+            "hla_allele": "HLA-A*02:01",
+            "binding_affinity": 15.2,
+            "immunogenicity": 0.89
+          },
+          {
+            "peptide": "TP53_R175H_10mer",
+            "hla_allele": "HLA-A*24:02",
+            "binding_affinity": 28.7,
+            "immunogenicity": 0.76
+          }
+        ]
+      },
+      "duration": 0
+    },
+    "literature": {
+      "taskId": "54c6f379-0d61-4c63-a4aa-7c163e8a9938",
+      "agentId": "literature-miner",
+      "tool": "search_literature",
+      "result": {
+        "query": "NSCLC EGFR-mutated multi-agent AI drug discovery 2026",
+        "total_results": 2847,
+        "top_papers": [
+          {
+            "pmid": "39284102",
+            "title": "Multi-Agent LLM Systems for Autonomous Drug Target Discovery",
+            "journal": "Nature Reviews Drug Discovery",
+            "year": 2026,
+            "impact_factor": 84.6,
+            "citations": 127,
+            "relevance": 0.97
+          },
+          {
+            "pmid": "39301847",
+            "title": "Virtual Human Twins in Precision Oncology: From Molecular to Clinical Scale",
+            "journal": "Cancer Cell",
+            "year": 2026,
+            "impact_factor": 50.3,
+            "citations": 89,
+            "relevance": 0.94
+          },
+          {
+            "pmid": "39156233",
+            "title": "RLVR-Trained Science Agents Outperform Human Researchers in Hypothesis Generation",
+            "journal": "Science",
+            "year": 2025,
+            "impact_factor": 56.9,
+            "citations": 412,
+            "relevance": 0.91
+          }
+        ],
+        "emerging_trends": [
+          "Multi-agent agentic AI for clinical trial design",
+          "Digital twins predicting immunotherapy response",
+          "CRISPR-guided AI for synthetic lethality mapping"
+        ]
+      },
+      "duration": 0
+    },
+    "knowledgeGraph": {
+      "taskId": "546068aa-40a3-4edf-951c-355df375a8f2",
+      "agentId": "literature-miner",
+      "tool": "build_knowledge_graph",
+      "result": {
+        "topic": "NSCLC EGFR-mutated",
+        "nodes": 1247,
+        "edges": 4891,
+        "key_entities": [
+          {
+            "type": "gene",
+            "name": "BRCA1",
+            "connections": 342
+          },
+          {
+            "type": "drug",
+            "name": "Olaparib",
+            "connections": 289
+          },
+          {
+            "type": "pathway",
+            "name": "DNA Damage Response",
+            "connections": 456
+          },
+          {
+            "type": "mechanism",
+            "name": "Synthetic Lethality",
+            "connections": 178
+          }
+        ],
+        "novel_connections": [
+          "BRCA1 → CDK12 inhibition → STING pathway activation → Enhanced immunogenicity",
+          "mTOR → Autophagy → Ferroptosis sensitivity → Novel therapeutic angle"
+        ]
+      },
+      "duration": 0
+    },
+    "pathways": {
+      "taskId": "b15b5d36-ef96-4b76-9cf5-d5e5bfea0cb5",
+      "agentId": "pathway-mapper",
+      "tool": "analyze_pathway",
+      "result": {
+        "pathway": "RTK-RAS-MAPK",
+        "cancer": "NSCLC EGFR-mutated",
+        "nodes_affected": 23,
+        "critical_nodes": [
+          {
+            "gene": "EGFR",
+            "status": "Activated (L858R)",
+            "therapeutic_potential": "High"
+          },
+          {
+            "gene": "KRAS",
+            "status": "Mutated (G12C)",
+            "therapeutic_potential": "High — Sotorasib"
+          },
+          {
+            "gene": "BRAF",
+            "status": "Wild-type",
+            "therapeutic_potential": "Low"
+          },
+          {
+            "gene": "MEK1/2",
+            "status": "Hyperactivated",
+            "therapeutic_potential": "Medium — Trametinib"
+          }
+        ],
+        "synthetic_lethal_pairs": [
+          {
+            "gene_a": "BRCA1_loss",
+            "gene_b": "PARP1_inhibition",
+            "confidence": 0.97,
+            "drug": "Olaparib"
+          },
+          {
+            "gene_a": "KRAS_G12C",
+            "gene_b": "SHP2_inhibition",
+            "confidence": 0.82,
+            "drug": "TNO155"
+          }
+        ],
+        "combination_recommendations": [
+          "EGFR inhibitor (Osimertinib) + MEK inhibitor (Trametinib) — Synergy score: 0.89",
+          "PARP inhibitor (Olaparib) + PD-1 antibody (Pembrolizumab) — Synergy score: 0.76"
+        ]
+      },
+      "duration": 1
+    },
+    "drugs": {
+      "taskId": "a25eb8d9-619c-4310-9c67-3e095fdc276c",
+      "agentId": "drug-architect",
+      "tool": "design_molecule",
+      "result": {
+        "target": "HER2/ERBB2",
+        "mechanism": "reversible inhibitor",
+        "candidates": [
+          {
+            "id": "PRISM-001",
+            "smiles": "CC1=CC(=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)OC4CCOCC4",
+            "binding_affinity_nm": 2.3,
+            "selectivity_ratio": 145,
+            "admet": {
+              "oral_bioavailability": 0.78,
+              "half_life_h": 12.4,
+              "herg_liability": "Low",
+              "hepatotoxicity": "Minimal"
+            },
+            "synthesis_steps": 7,
+            "novelty_score": 0.94
+          },
+          {
+            "id": "PRISM-002",
+            "smiles": "O=C(NC1=NC=C(Cl)C=C1)C2=CC=CC(=C2)N3CCNCC3",
+            "binding_affinity_nm": 5.1,
+            "selectivity_ratio": 89,
+            "admet": {
+              "oral_bioavailability": 0.85,
+              "half_life_h": 8.7,
+              "herg_liability": "Low",
+              "hepatotoxicity": "None"
+            },
+            "synthesis_steps": 5,
+            "novelty_score": 0.91
+          }
+        ],
+        "recommendation": "PRISM-001 shows superior binding (2.3nM) to HER2/ERBB2 with excellent selectivity. Recommend advancing to in-silico validation."
+      },
+      "duration": 0
+    },
+    "simulation": {
+      "taskId": "dec7b283-7cfa-4366-b09c-4ada20a40c17",
+      "agentId": "digital-twin",
+      "tool": "simulate_treatment",
+      "result": {
+        "patient": "NSCLC EGFR-mutated_TCGA-LUAD-55-7907",
+        "treatment": "PRISM-001",
+        "simulation_weeks": 12,
+        "response_curve": [
+          {
+            "week": 1,
+            "tumor_size_pct": 89.4,
+            "ctDNA": "72.6"
+          },
+          {
+            "week": 2,
+            "tumor_size_pct": 82.2,
+            "ctDNA": "70.9"
+          },
+          {
+            "week": 3,
+            "tumor_size_pct": 73.9,
+            "ctDNA": "68.9"
+          },
+          {
+            "week": 4,
+            "tumor_size_pct": 67.3,
+            "ctDNA": "56.0"
+          },
+          {
+            "week": 5,
+            "tumor_size_pct": 63.2,
+            "ctDNA": "54.6"
+          },
+          {
+            "week": 6,
+            "tumor_size_pct": 58,
+            "ctDNA": "54.1"
+          },
+          {
+            "week": 7,
+            "tumor_size_pct": 54.6,
+            "ctDNA": "45.9"
+          },
+          {
+            "week": 8,
+            "tumor_size_pct": 46.5,
+            "ctDNA": "46.6"
+          },
+          {
+            "week": 9,
+            "tumor_size_pct": 40.7,
+            "ctDNA": "37.6"
+          },
+          {
+            "week": 10,
+            "tumor_size_pct": 37.3,
+            "ctDNA": "30.7"
+          },
+          {
+            "week": 11,
+            "tumor_size_pct": 33.6,
+            "ctDNA": "35.7"
+          },
+          {
+            "week": 12,
+            "tumor_size_pct": 30.3,
+            "ctDNA": "27.2"
+          }
+        ],
+        "predicted_outcome": "Partial Response (PR)",
+        "confidence": "0.70",
+        "toxicity_risk": {
+          "grade3_plus": "0.10",
+          "dlt_probability": "0.08"
+        },
+        "recommendation": "Continue PRISM-001. Monitor ctDNA every 4 weeks."
+      },
+      "duration": 1
+    },
+    "trials": {
+      "taskId": "cebcc923-cd19-424a-bc27-a5a5aa2b693c",
+      "agentId": "clinical-analyst",
+      "tool": "search_trials",
+      "result": {
+        "condition": "NSCLC EGFR-mutated",
+        "intervention": "Trastuzumab",
+        "matching_trials": [
+          {
+            "nct_id": "NCT05946890",
+            "title": "Multi-Agent AI-Guided Personalized Immunotherapy in Advanced NSCLC",
+            "phase": "Phase II",
+            "status": "Recruiting",
+            "locations": [
+              "Institut Gustave Roussy (France)",
+              "MD Anderson (USA)"
+            ],
+            "primary_endpoint": "Objective Response Rate",
+            "enrollment": 240,
+            "estimated_completion": "2028-06"
+          },
+          {
+            "nct_id": "NCT06123456",
+            "title": "Digital Twin-Guided Combination Therapy for HER2+ Breast Cancer",
+            "phase": "Phase I/II",
+            "status": "Not yet recruiting",
+            "locations": [
+              "Institut Curie (France)"
+            ],
+            "primary_endpoint": "Safety & Dose-Limiting Toxicity",
+            "enrollment": 60,
+            "estimated_completion": "2027-12"
+          }
+        ],
+        "patient_eligibility_summary": "Based on NSCLC EGFR-mutated with Trastuzumab: ~3869 eligible patients in France"
+      },
+      "duration": 0
+    },
+    "grants": {
+      "taskId": "e1bdd96e-447e-4ec8-a3e4-045de1aa2d3c",
+      "agentId": "grant-writer",
+      "tool": "scan_grants",
+      "result": {
+        "keywords": "NSCLC EGFR-mutated AI multi-agent digital twin",
+        "region": "EU",
+        "opportunities": [
+          {
+            "id": "HORIZON-MISS-2026-02-CANCER-01",
+            "title": "Virtual Human Twin models for cancer research",
+            "body": "EU Horizon Europe",
+            "budget": "€6-10M per consortium",
+            "deadline": "2026-09-15",
+            "fit_score": 0.97,
+            "action": "Form consortium — PI + 3 academic partners needed"
+          },
+          {
+            "id": "DIGITAL-2026-AI-09",
+            "title": "AI-based solutions in cancer medical imaging",
+            "body": "EU Digital Europe",
+            "budget": "€2-5M",
+            "deadline": "2026-Q3",
+            "fit_score": 0.91,
+            "action": "Direct application — SME eligible"
+          },
+          {
+            "id": "BPI-DEEPTECH-2026",
+            "title": "Deep Tech Innovation Grant",
+            "body": "BPI France",
+            "budget": "€500K-3M",
+            "deadline": "Rolling",
+            "fit_score": 0.94,
+            "action": "Apply immediately — French EURL eligible"
+          },
+          {
+            "id": "EIC-PATHFINDER-AI-CANCER",
+            "title": "Generative AI agents for cancer diagnosis",
+            "body": "European Innovation Council",
+            "budget": "€3-4M",
+            "deadline": "2025-10 (next cycle 2026)",
+            "fit_score": 0.89,
+            "action": "Prepare for 2026 cycle — Early submission recommended"
+          },
+          {
+            "id": "NCI-ITCR-R21",
+            "title": "Informatics Technology for Cancer Research",
+            "body": "NIH / NCI (USA)",
+            "budget": "$275K over 2 years",
+            "deadline": "Multiple cycles",
+            "fit_score": 0.83,
+            "action": "US collaborator needed — identify partner at UCSF/MIT"
+          }
+        ],
+        "next_steps": "Prioritize BPI France (rolling, highest immediate ROI) and HORIZON-MISS-2026-02-CANCER-01 (largest budget, Sep deadline)"
+      },
+      "duration": 0
+    }
+  }
+}

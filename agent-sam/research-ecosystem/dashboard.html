@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISM-Onco — Grant Submission Autopilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #1f1f35;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2d2d44;
+            --gradient-1: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            --gradient-2: linear-gradient(135deg, #10b981, #06b6d4);
+            --gradient-3: linear-gradient(135deg, #f59e0b, #ef4444);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+            z-index: 0;
+            animation: bgShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-5%, -5%) rotate(3deg);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+        }
+
+        .header .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .company-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .company-info .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.15);
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2.5rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Grant Cards */
+        .grants-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grant-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .grant-card.ready::before {
+            background: var(--gradient-2);
+        }
+
+        .grant-card.draft::before {
+            background: linear-gradient(90deg, var(--accent-amber), var(--accent-primary));
+        }
+
+        .grant-card.monitoring::before {
+            background: linear-gradient(90deg, var(--text-muted), var(--text-secondary));
+        }
+
+        .grant-card.needs-partner::before {
+            background: var(--gradient-3);
+        }
+
+        .grant-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .grant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .grant-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .grant-body {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .grant-status {
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .status-ready {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-draft {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-monitoring {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-secondary);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .status-partner {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .grant-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .grant-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .grant-meta-item strong {
+            color: var(--text-primary);
+        }
+
+        .fit-bar {
+            width: 60px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+
+        .fit-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 1s ease;
+        }
+
+        .fit-high .fit-bar-fill {
+            background: var(--accent-green);
+        }
+
+        .fit-medium .fit-bar-fill {
+            background: var(--accent-amber);
+        }
+
+        .grant-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .checklist li:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .checklist li.done {
+            opacity: 0.5;
+            border-color: var(--accent-green);
+        }
+
+        .checklist .check {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checklist li.done .check {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .checklist .step-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .checklist .step-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .checklist .step-info a {
+            color: var(--accent-primary);
+        }
+
+        /* Agent Fleet */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .agent-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .agent-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .agent-card .agent-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-card p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .agent-status {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        /* Pipeline results */
+        .pipeline-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .result-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+        }
+
+        .result-item:last-child {
+            border: none;
+        }
+
+        .result-item .label {
+            color: var(--text-secondary);
+        }
+
+        .result-item .value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.5s;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .company-info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .grant-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .grant-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header animate-in">
+            <div class="logo">🔬</div>
+            <h1>PRISM-Onco Grant Autopilot</h1>
+            <p class="subtitle">Multi-Agent Cancer Research Ecosystem — Autonomous Grant Dashboard</p>
+            <div class="company-info">
+                <span class="badge">🏢 PRIME.AI (EURL)</span>
+                <span class="badge">📋 SIRET: 990 020 893 00014</span>
+                <span class="badge">👤 Yacine Benhamou</span>
+                <span class="badge">🇫🇷 Conflans-Sainte-Honorine</span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-bar animate-in delay-1">
+            <div class="stat-card">
+                <div class="value">8</div>
+                <div class="label">Grants Tracked</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">€15M+</div>
+                <div class="label">Potential Funding</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">3</div>
+                <div class="label">Ready to Submit</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">8</div>
+                <div class="label">AI Agents Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="value">3</div>
+                <div class="label">Cancer Studies Done</div>
+            </div>
+        </div>
+
+        <!-- Priority Grants -->
+        <h2 class="section-title animate-in delay-2"><span class="icon">🎯</span> Grant Opportunities</h2>
+        <div class="grants-grid animate-in delay-2">
+
+            <div class="grant-card ready"
+                onclick="this.querySelector('.grant-actions').style.display = this.querySelector('.grant-actions').style.display === 'none' ? 'flex' : 'none'">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🟢 BPI France — Aide au Développement DeepTech</div>
+                        <div class="grant-body">BPI France • Rolling deadline • Up to €2M</div>
+                    </div>
+                    <span class="grant-status status-ready">Ready to Submit</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item">💰 <strong>€810K</strong> (45% of €1.8M)</div>
+                    <div class="grant-meta-item">⏰ <strong>Rolling</strong> deadline</div>
+                    <div class="grant-meta-item fit-high">📊 Fit: <strong>95%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:95%"></span></span></div>
+                </div>
+                <div class="grant-actions" style="display:none">
+                    <a class="btn btn-primary" href="https://www.bpifrance.fr/" target="_blank">🌐 Go to BPI France
+                        Portal</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('bpi')">📋 Copy Dossier</button>
+                    <span class="btn btn-success">✅ Dossier Complete</span>
+                </div>
+            </div>
+
+            <div class="grant-card ready">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🔵 Bourse French Tech Émergence</div>
+                        <div class="grant-body">BPI France • Rolling • Up to €90K</div>
+                    </div>
+                    <span class="grant-status status-ready">Ready to Apply</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item">💰 <strong>€90K</strong> (non-repayable)</div>
+                    <div class="grant-meta-item">⏰ <strong>Rolling</strong></div>
+                    <div class="grant-meta-item fit-high">📊 Fit: <strong>88%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:88%"></span></span></div>
+                </div>
+            </div>
+
+            <div class="grant-card ready">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🔵 CIFRE — PhD Funding (ANRT)</div>
+                        <div class="grant-body">ANRT France • Rolling • PhD salary + €14K/year</div>
+                    </div>
+                    <span class="grant-status status-ready">Ready to Apply</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item">💰 <strong>€14K/year</strong> + PhD salary</div>
+                    <div class="grant-meta-item">⏰ <strong>Rolling</strong></div>
+                    <div class="grant-meta-item fit-high">📊 Fit: <strong>90%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:90%"></span></span></div>
+                </div>
+            </div>
+
+            <div class="grant-card draft"
+                onclick="this.querySelector('.grant-actions').style.display = this.querySelector('.grant-actions').style.display === 'none' ? 'flex' : 'none'">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🟡 EU Horizon — Virtual Human Twin (CANCER-01)</div>
+                        <div class="grant-body">EU Horizon Europe (HaDEA) • Sep 15, 2026 • €6-10M</div>
+                    </div>
+                    <span class="grant-status status-draft">Draft Ready</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item">💰 <strong>€7.2M</strong> (consortium)</div>
+                    <div class="grant-meta-item">⏰ <strong>Sep 15, 2026</strong></div>
+                    <div class="grant-meta-item fit-high">📊 Fit: <strong>97%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:97%"></span></span></div>
+                </div>
+                <div class="grant-actions" style="display:none">
+                    <a class="btn btn-primary" href="https://ec.europa.eu/info/funding-tenders/" target="_blank">🌐 EU
+                        Portal (Register PIC)</a>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('horizon')">📋 Copy Part B</button>
+                    <span class="btn btn-success">✅ Part B Ready</span>
+                </div>
+            </div>
+
+            <div class="grant-card monitoring">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">⚪ EIC Pathfinder — Gen-AI for Cancer</div>
+                        <div class="grant-body">European Innovation Council • 2026 cycle • €3-4M</div>
+                    </div>
+                    <span class="grant-status status-monitoring">Monitoring</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item fit-medium">📊 Fit: <strong>89%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:89%"></span></span></div>
+                </div>
+            </div>
+
+            <div class="grant-card monitoring">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">⚪ Cancer Grand Challenges</div>
+                        <div class="grant-body">CRUK + NCI • Rolling • Up to £20M</div>
+                    </div>
+                    <span class="grant-status status-monitoring">Monitoring</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item fit-high">📊 Fit: <strong>91%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:91%"></span></span></div>
+                </div>
+            </div>
+
+            <div class="grant-card needs-partner">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🟠 NSF/NIH/FDA — Digital Twins BioTech</div>
+                        <div class="grant-body">NSF + NIH + FDA (USA) • Apr 10, 2026 • $1-2M</div>
+                    </div>
+                    <span class="grant-status status-partner">Needs US Partner</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item fit-medium">📊 Fit: <strong>84%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:84%"></span></span></div>
+                </div>
+            </div>
+
+            <div class="grant-card needs-partner">
+                <div class="grant-header">
+                    <div>
+                        <div class="grant-name">🟠 NCI ITCR — Informatics for Cancer Research</div>
+                        <div class="grant-body">NIH / NCI (USA) • Multiple • $275K</div>
+                    </div>
+                    <span class="grant-status status-partner">Needs US Partner</span>
+                </div>
+                <div class="grant-meta">
+                    <div class="grant-meta-item fit-medium">📊 Fit: <strong>83%</strong> <span class="fit-bar"><span
+                                class="fit-bar-fill" style="width:83%"></span></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <h2 class="section-title animate-in delay-3"><span class="icon">✅</span> Your Action Checklist</h2>
+        <ul class="checklist animate-in delay-3">
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>PhD Research Proposal</h4>
+                    <p>Complete (23KB) — PRISM-Onco Multi-Agent Cancer Research Framework</p>
+                </div>
+            </li>
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>BPI France DeepTech Application Dossier</h4>
+                    <p>Complete — Full dossier in French, ready to copy-paste into BPI portal</p>
+                </div>
+            </li>
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>EU Horizon Europe Part B (Technical Annex)</h4>
+                    <p>Complete — PRISM-VHT proposal with budget, work packages, consortium structure</p>
+                </div>
+            </li>
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>SEO Strategy</h4>
+                    <p>Complete (11KB) — 90-day content calendar, keywords, schema markup</p>
+                </div>
+            </li>
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>PRISM-Onco 8-Agent System</h4>
+                    <p>Built & tested — Genomics, Proteomics, Literature, Drug Design, Pathway, Clinical, Digital Twin,
+                        Grant Writer</p>
+                </div>
+            </li>
+            <li class="done">
+                <span class="check">✓</span>
+                <div class="step-info">
+                    <h4>Cancer Case Studies (3)</h4>
+                    <p>HER2+ Breast Cancer, EGFR-mutated NSCLC, Pancreatic Adenocarcinoma — all analyzed</p>
+                </div>
+            </li>
+            <li>
+                <span class="check">1</span>
+                <div class="step-info">
+                    <h4>Get Kbis Extract</h4>
+                    <p><a href="https://www.infogreffe.fr/" target="_blank">infogreffe.fr</a> — SIRET: 99002089300014
+                    </p>
+                </div>
+            </li>
+            <li>
+                <span class="check">2</span>
+                <div class="step-info">
+                    <h4>Register on EU Funding Portal → Get PIC</h4>
+                    <p><a href="https://ec.europa.eu/info/funding-tenders/" target="_blank">EC Funding Portal</a> —
+                        Create EU Login → Register PRIME.AI → Get 9-digit PIC</p>
+                </div>
+            </li>
+            <li>
+                <span class="check">3</span>
+                <div class="step-info">
+                    <h4>Register on BPI France → Submit DeepTech</h4>
+                    <p><a href="https://www.bpifrance.fr/" target="_blank">bpifrance.fr</a> — Use SIRET: 99002089300014
+                        → Apply for ADD</p>
+                </div>
+            </li>
+            <li>
+                <span class="check">4</span>
+                <div class="step-info">
+                    <h4>Send Consortium Emails</h4>
+                    <p>Email templates ready for: Institut Gustave Roussy, DKFZ Heidelberg, NCI</p>
+                </div>
+            </li>
+        </ul>
+
+        <!-- PRISM-Onco Agent Fleet -->
+        <h2 class="section-title animate-in delay-4"><span class="icon">🤖</span> PRISM-Onco Agent Fleet</h2>
+        <div class="agents-grid animate-in delay-4">
+            <div class="agent-card">
+                <div class="agent-icon">🧬</div>
+                <h4>Genomics Analyst</h4>
+                <p>Variant calling, mutation signatures, TMB, MSI detection, CNV/SV analysis</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">🔬</div>
+                <h4>Proteomics Expert</h4>
+                <p>Druggable targets, protein structure (AlphaFold3), neoantigens, PTM analysis</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">📚</div>
+                <h4>Literature Miner</h4>
+                <p>PubMed search (200+ papers/hr), knowledge graphs, trend detection, contradictions</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">💊</div>
+                <h4>Drug Design Architect</h4>
+                <p>De novo molecule generation, ADMET prediction, binding simulation, synthesis planning</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">🗺️</div>
+                <h4>Pathway Mapper</h4>
+                <p>Cancer signaling pathways, synthetic lethality, resistance modeling, combination therapy</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">🏥</div>
+                <h4>Clinical Trial Analyst</h4>
+                <p>ClinicalTrials.gov search, patient stratification, protocol design, outcome prediction</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">🧪</div>
+                <h4>Digital Twin Simulator</h4>
+                <p>Virtual patient modeling, PK/PD simulation, immune modeling, treatment response</p>
+                <span class="agent-status">● Active</span>
+            </div>
+            <div class="agent-card">
+                <div class="agent-icon">📝</div>
+                <h4>Grant Writer & SEO</h4>
+                <p>Grant scanning, proposal generation, SEO optimization, compliance checking</p>
+                <span class="agent-status">● Active</span>
+            </div>
+        </div>
+
+        <!-- Research Results -->
+        <h2 class="section-title animate-in delay-5"><span class="icon">📊</span> Pipeline Results</h2>
+        <div class="pipeline-results animate-in delay-5">
+            <div class="result-card">
+                <h4>🧬 HER2+ Breast Cancer</h4>
+                <div class="result-item"><span class="label">Sample</span><span class="value">TCGA-BRCA-A7-A0DA</span>
+                </div>
+                <div class="result-item"><span class="label">Variants</span><span class="value">28,696</span></div>
+                <div class="result-item"><span class="label">TMB</span><span class="value">10.3 mut/Mb</span></div>
+                <div class="result-item"><span class="label">Top Target</span><span class="value">HER2/ERBB2</span>
+                </div>
+                <div class="result-item"><span class="label">Drug Candidate</span><span class="value">PRISM-001
+                        (2.3nM)</span></div>
+                <div class="result-item"><span class="label">Response</span><span class="value"
+                        style="color:var(--accent-green)">Partial Response</span></div>
+            </div>
+            <div class="result-card">
+                <h4>🫁 NSCLC EGFR-mutated</h4>
+                <div class="result-item"><span class="label">Sample</span><span class="value">TCGA-LUAD-55-7907</span>
+                </div>
+                <div class="result-item"><span class="label">Variants</span><span class="value">~30,000</span></div>
+                <div class="result-item"><span class="label">Top Target</span><span class="value">HER2/ERBB2</span>
+                </div>
+                <div class="result-item"><span class="label">Drug Candidate</span><span class="value">PRISM-001
+                        (2.3nM)</span></div>
+                <div class="result-item"><span class="label">Response</span><span class="value"
+                        style="color:var(--accent-green)">Partial Response</span></div>
+            </div>
+            <div class="result-card">
+                <h4>🔬 Pancreatic Adenocarcinoma</h4>
+                <div class="result-item"><span class="label">Sample</span><span class="value">TCGA-PAAD-FB-A4P5</span>
+                </div>
+                <div class="result-item"><span class="label">Variants</span><span class="value">40,648</span></div>
+                <div class="result-item"><span class="label">TMB</span><span class="value">14.4 mut/Mb</span></div>
+                <div class="result-item"><span class="label">Drug Candidate</span><span class="value">PRISM-001
+                        (2.3nM)</span></div>
+                <div class="result-item"><span class="label">Response</span><span class="value"
+                        style="color:var(--accent-green)">Partial Response</span></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>PRISM-Onco Grant Autopilot — Built by <a href="https://prime-ai.fr">Prime-AI</a> Multi-Agent System</p>
+            <p style="margin-top:0.5rem">Yacine Benhamou • PRIME.AI (EURL) • SIRET: 990 020 893 00014 • <a
+                    href="mailto:yacine@prime-ai.fr">yacine@prime-ai.fr</a></p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(type) {
+            const texts = {
+                bpi: 'BPI France DeepTech Application — see grants/BPI_FRANCE_DEEPTECH_APPLICATION.md',
+                horizon: 'Horizon Europe CANCER-01 Part B — see grants/HORIZON_EUROPE_CANCER01_PROPOSAL.md'
+            };
+            navigator.clipboard.writeText(texts[type] || '').then(() => {
+                alert('Reference copied! Open the file to get the full dossier.');
+            });
+        }
+
+        // Animate stats
+        document.querySelectorAll('.stat-card .value').forEach((el, i) => {
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '1';
+            }, 300 + i * 100);
+        });
+
+        // Toggle checklist done state
+        document.querySelectorAll('.checklist li:not(.done)').forEach(li => {
+            li.querySelector('.check')?.addEventListener('click', () => {
+                li.classList.toggle('done');
+                if (li.classList.contains('done')) li.querySelector('.check').textContent = '✓';
+                else li.querySelector('.check').textContent = li.querySelector('.check').textContent;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

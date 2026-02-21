@@ -1,0 +1,25 @@
+{
+  "name": "OpenClaw-SAM-Chamber",
+  "mode": "mcp-server",
+  "isolation": true,
+  "restrictions": {
+    "shell_access": false,
+    "host_filesystem": false,
+    "network_external": true,
+    "allowed_protocols": [
+      "mcp",
+      "a2a"
+    ]
+  },
+  "mcp": {
+    "transport": "stdio",
+    "tools": [
+      "whatsapp-send",
+      "discord-send",
+      "email-send",
+      "calendar-create",
+      "web-search",
+      "web-browse"
+    ]
+  }
+}

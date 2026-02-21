@@ -1,0 +1,24 @@
+{
+    "name": "agent-sam",
+    "version": "1.0.0",
+    "description": "SAM Chamber — A2A + MCP Multi-Agent Orchestrator (Antigravity + OpenClaw + Agent Zero)",
+    "type": "module",
+    "main": "src/gateway.js",
+    "scripts": {
+        "start": "node src/gateway.js",
+        "dev": "node --watch src/gateway.js",
+        "setup:openclaw": "node scripts/setup-openclaw.js",
+        "setup:agent-zero": "node scripts/setup-agent-zero.js",
+        "status": "node scripts/status.js"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "uuid": "^11.1.0",
+        "ws": "^8.18.0"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "author": "Yacine Benhamou <yacine@prime-ai.fr>",
+    "license": "MIT"
+}

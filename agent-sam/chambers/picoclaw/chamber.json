@@ -1,0 +1,26 @@
+{
+    "name": "PicoClaw-SAM-Chamber",
+    "mode": "mcp-server",
+    "isolation": true,
+    "restrictions": {
+        "shell_access": false,
+        "host_filesystem": false,
+        "network_external": true,
+        "memory_limit_mb": 10,
+        "allowed_protocols": [
+            "mcp",
+            "a2a"
+        ]
+    },
+    "mcp": {
+        "transport": "stdio",
+        "tools": [
+            "chat",
+            "web-search",
+            "summarize",
+            "translate",
+            "remind",
+            "note"
+        ]
+    }
+}

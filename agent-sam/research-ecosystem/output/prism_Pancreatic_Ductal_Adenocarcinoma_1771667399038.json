@@ -1,0 +1,500 @@
+{
+  "pipeline_id": "f400dc11-a502-4458-a965-1a91f4817739",
+  "cancer_type": "Pancreatic Ductal Adenocarcinoma",
+  "sample_id": "TCGA-PAAD-FB-A4P5",
+  "timestamp": "2026-02-21T09:49:59.038Z",
+  "agents_used": 7,
+  "tasks_completed": 10,
+  "key_findings": {
+    "variants": 40648,
+    "tmb": 14.4,
+    "top_target": "HER2/ERBB2",
+    "drug_candidate": "PRISM-001",
+    "binding_affinity": "2.3 nM",
+    "predicted_response": "Partial Response (PR)",
+    "matching_trials": 2,
+    "grant_opportunities": 5
+  },
+  "results": {
+    "genomics": {
+      "taskId": "c276e888-732b-4bf3-b5a8-2e7b7a22ab25",
+      "agentId": "genomics-analyst",
+      "tool": "variant_call",
+      "result": {
+        "sample": "TCGA-PAAD-FB-A4P5",
+        "genome": "GRCh38",
+        "variants_detected": 40648,
+        "snps": 28453,
+        "indels": 8129,
+        "structural": 4064,
+        "tmb_score": 14.4,
+        "msi_status": "MSI-High",
+        "actionable_mutations": [
+          {
+            "gene": "BRCA1",
+            "variant": "p.C61G",
+            "significance": "Pathogenic",
+            "drug": "Olaparib"
+          },
+          {
+            "gene": "TP53",
+            "variant": "p.R175H",
+            "significance": "Pathogenic",
+            "drug": "APR-246"
+          },
+          {
+            "gene": "PIK3CA",
+            "variant": "p.H1047R",
+            "significance": "Likely pathogenic",
+            "drug": "Alpelisib"
+          }
+        ]
+      },
+      "duration": 1
+    },
+    "signatures": {
+      "taskId": "e84192d5-7d98-4428-9805-fa826f5f830c",
+      "agentId": "genomics-analyst",
+      "tool": "mutation_signature",
+      "result": {
+        "sample": "TCGA-PAAD-FB-A4P5",
+        "dominant_signatures": [
+          {
+            "signature": "SBS1",
+            "contribution": 0.35,
+            "etiology": "Spontaneous deamination (age-related)"
+          },
+          {
+            "signature": "SBS5",
+            "contribution": 0.25,
+            "etiology": "Clock-like"
+          },
+          {
+            "signature": "SBS3",
+            "contribution": 0.2,
+            "etiology": "HR deficiency (BRCA1/2)"
+          },
+          {
+            "signature": "SBS13",
+            "contribution": 0.12,
+            "etiology": "APOBEC mutagenesis"
+          }
+        ],
+        "hr_deficiency_score": 42,
+        "recommendation": "Patient likely HRD-positive — consider PARP inhibitor therapy"
+      },
+      "duration": 0
+    },
+    "targets": {
+      "taskId": "8cd0d54e-0eb6-4777-b1fd-ca80f3dbccdd",
+      "agentId": "proteomics-expert",
+      "tool": "identify_targets",
+      "result": {
+        "cancer_type": "Pancreatic Ductal Adenocarcinoma",
+        "druggable_targets": [
+          {
+            "protein": "HER2/ERBB2",
+            "expression_fold": 12.3,
+            "druggability": 0.95,
+            "drugs": [
+              "Trastuzumab",
+              "Pertuzumab",
+              "T-DXd"
+            ]
+          },
+          {
+            "protein": "PD-L1/CD274",
+            "expression_fold": 4.7,
+            "druggability": 0.88,
+            "drugs": [
+              "Atezolizumab",
+              "Durvalumab"
+            ]
+          },
+          {
+            "protein": "VEGFR2/KDR",
+            "expression_fold": 3.2,
+            "druggability": 0.82,
+            "drugs": [
+              "Bevacizumab",
+              "Ramucirumab"
+            ]
+          },
+          {
+            "protein": "mTOR",
+            "expression_fold": 2.8,
+            "druggability": 0.78,
+            "drugs": [
+              "Everolimus",
+              "Temsirolimus"
+            ]
+          }
+        ],
+        "neoantigens": [
+          {
+            "peptide": "KRAS_G12D_9mer",
+            "hla_allele": "HLA-A*02:01",
+            "binding_affinity": 15.2,
+            "immunogenicity": 0.89
+          },
+          {
+            "peptide": "TP53_R175H_10mer",
+            "hla_allele": "HLA-A*24:02",
+            "binding_affinity": 28.7,
+            "immunogenicity": 0.76
+          }
+        ]
+      },
+      "duration": 0
+    },
+    "literature": {
+      "taskId": "f5e20757-afce-48fe-8eb5-f9a4f7981b92",
+      "agentId": "literature-miner",
+      "tool": "search_literature",
+      "result": {
+        "query": "Pancreatic Ductal Adenocarcinoma multi-agent AI drug discovery 2026",
+        "total_results": 2847,
+        "top_papers": [
+          {
+            "pmid": "39284102",
+            "title": "Multi-Agent LLM Systems for Autonomous Drug Target Discovery",
+            "journal": "Nature Reviews Drug Discovery",
+            "year": 2026,
+            "impact_factor": 84.6,
+            "citations": 127,
+            "relevance": 0.97
+          },
+          {
+            "pmid": "39301847",
+            "title": "Virtual Human Twins in Precision Oncology: From Molecular to Clinical Scale",
+            "journal": "Cancer Cell",
+            "year": 2026,
+            "impact_factor": 50.3,
+            "citations": 89,
+            "relevance": 0.94
+          },
+          {
+            "pmid": "39156233",
+            "title": "RLVR-Trained Science Agents Outperform Human Researchers in Hypothesis Generation",
+            "journal": "Science",
+            "year": 2025,
+            "impact_factor": 56.9,
+            "citations": 412,
+            "relevance": 0.91
+          }
+        ],
+        "emerging_trends": [
+          "Multi-agent agentic AI for clinical trial design",
+          "Digital twins predicting immunotherapy response",
+          "CRISPR-guided AI for synthetic lethality mapping"
+        ]
+      },
+      "duration": 0
+    },
+    "knowledgeGraph": {
+      "taskId": "a24cddbf-9515-4644-b5d3-eeb0e16576fd",
+      "agentId": "literature-miner",
+      "tool": "build_knowledge_graph",
+      "result": {
+        "topic": "Pancreatic Ductal Adenocarcinoma",
+        "nodes": 1247,
+        "edges": 4891,
+        "key_entities": [
+          {
+            "type": "gene",
+            "name": "BRCA1",
+            "connections": 342
+          },
+          {
+            "type": "drug",
+            "name": "Olaparib",
+            "connections": 289
+          },
+          {
+            "type": "pathway",
+            "name": "DNA Damage Response",
+            "connections": 456
+          },
+          {
+            "type": "mechanism",
+            "name": "Synthetic Lethality",
+            "connections": 178
+          }
+        ],
+        "novel_connections": [
+          "BRCA1 → CDK12 inhibition → STING pathway activation → Enhanced immunogenicity",
+          "mTOR → Autophagy → Ferroptosis sensitivity → Novel therapeutic angle"
+        ]
+      },
+      "duration": 1
+    },
+    "pathways": {
+      "taskId": "36da3966-277d-4e9c-81b1-67023d37d340",
+      "agentId": "pathway-mapper",
+      "tool": "analyze_pathway",
+      "result": {
+        "pathway": "RTK-RAS-MAPK",
+        "cancer": "Pancreatic Ductal Adenocarcinoma",
+        "nodes_affected": 23,
+        "critical_nodes": [
+          {
+            "gene": "EGFR",
+            "status": "Activated (L858R)",
+            "therapeutic_potential": "High"
+          },
+          {
+            "gene": "KRAS",
+            "status": "Mutated (G12C)",
+            "therapeutic_potential": "High — Sotorasib"
+          },
+          {
+            "gene": "BRAF",
+            "status": "Wild-type",
+            "therapeutic_potential": "Low"
+          },
+          {
+            "gene": "MEK1/2",
+            "status": "Hyperactivated",
+            "therapeutic_potential": "Medium — Trametinib"
+          }
+        ],
+        "synthetic_lethal_pairs": [
+          {
+            "gene_a": "BRCA1_loss",
+            "gene_b": "PARP1_inhibition",
+            "confidence": 0.97,
+            "drug": "Olaparib"
+          },
+          {
+            "gene_a": "KRAS_G12C",
+            "gene_b": "SHP2_inhibition",
+            "confidence": 0.82,
+            "drug": "TNO155"
+          }
+        ],
+        "combination_recommendations": [
+          "EGFR inhibitor (Osimertinib) + MEK inhibitor (Trametinib) — Synergy score: 0.89",
+          "PARP inhibitor (Olaparib) + PD-1 antibody (Pembrolizumab) — Synergy score: 0.76"
+        ]
+      },
+      "duration": 0
+    },
+    "drugs": {
+      "taskId": "17e51ddf-e496-43bf-b4d6-6e2210816824",
+      "agentId": "drug-architect",
+      "tool": "design_molecule",
+      "result": {
+        "target": "HER2/ERBB2",
+        "mechanism": "reversible inhibitor",
+        "candidates": [
+          {
+            "id": "PRISM-001",
+            "smiles": "CC1=CC(=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)OC4CCOCC4",
+            "binding_affinity_nm": 2.3,
+            "selectivity_ratio": 145,
+            "admet": {
+              "oral_bioavailability": 0.78,
+              "half_life_h": 12.4,
+              "herg_liability": "Low",
+              "hepatotoxicity": "Minimal"
+            },
+            "synthesis_steps": 7,
+            "novelty_score": 0.94
+          },
+          {
+            "id": "PRISM-002",
+            "smiles": "O=C(NC1=NC=C(Cl)C=C1)C2=CC=CC(=C2)N3CCNCC3",
+            "binding_affinity_nm": 5.1,
+            "selectivity_ratio": 89,
+            "admet": {
+              "oral_bioavailability": 0.85,
+              "half_life_h": 8.7,
+              "herg_liability": "Low",
+              "hepatotoxicity": "None"
+            },
+            "synthesis_steps": 5,
+            "novelty_score": 0.91
+          }
+        ],
+        "recommendation": "PRISM-001 shows superior binding (2.3nM) to HER2/ERBB2 with excellent selectivity. Recommend advancing to in-silico validation."
+      },
+      "duration": 0
+    },
+    "simulation": {
+      "taskId": "e6db8153-0cb1-4841-ae23-7293d585819a",
+      "agentId": "digital-twin",
+      "tool": "simulate_treatment",
+      "result": {
+        "patient": "Pancreatic Ductal Adenocarcinoma_TCGA-PAAD-FB-A4P5",
+        "treatment": "PRISM-001",
+        "simulation_weeks": 12,
+        "response_curve": [
+          {
+            "week": 1,
+            "tumor_size_pct": 85.9,
+            "ctDNA": "76.0"
+          },
+          {
+            "week": 2,
+            "tumor_size_pct": 76,
+            "ctDNA": "68.0"
+          },
+          {
+            "week": 3,
+            "tumor_size_pct": 70.7,
+            "ctDNA": "63.4"
+          },
+          {
+            "week": 4,
+            "tumor_size_pct": 60.9,
+            "ctDNA": "52.9"
+          },
+          {
+            "week": 5,
+            "tumor_size_pct": 52,
+            "ctDNA": "51.2"
+          },
+          {
+            "week": 6,
+            "tumor_size_pct": 48.1,
+            "ctDNA": "43.9"
+          },
+          {
+            "week": 7,
+            "tumor_size_pct": 43.3,
+            "ctDNA": "42.7"
+          },
+          {
+            "week": 8,
+            "tumor_size_pct": 40.1,
+            "ctDNA": "34.2"
+          },
+          {
+            "week": 9,
+            "tumor_size_pct": 35.8,
+            "ctDNA": "38.4"
+          },
+          {
+            "week": 10,
+            "tumor_size_pct": 31.6,
+            "ctDNA": "32.8"
+          },
+          {
+            "week": 11,
+            "tumor_size_pct": 27.1,
+            "ctDNA": "30.4"
+          },
+          {
+            "week": 12,
+            "tumor_size_pct": 24,
+            "ctDNA": "20.2"
+          }
+        ],
+        "predicted_outcome": "Partial Response (PR)",
+        "confidence": "0.94",
+        "toxicity_risk": {
+          "grade3_plus": "0.11",
+          "dlt_probability": "0.02"
+        },
+        "recommendation": "Continue PRISM-001. Monitor ctDNA every 4 weeks."
+      },
+      "duration": 0
+    },
+    "trials": {
+      "taskId": "76305dec-2b48-410a-98bc-8bd1a77315d0",
+      "agentId": "clinical-analyst",
+      "tool": "search_trials",
+      "result": {
+        "condition": "Pancreatic Ductal Adenocarcinoma",
+        "intervention": "Trastuzumab",
+        "matching_trials": [
+          {
+            "nct_id": "NCT05946890",
+            "title": "Multi-Agent AI-Guided Personalized Immunotherapy in Advanced NSCLC",
+            "phase": "Phase II",
+            "status": "Recruiting",
+            "locations": [
+              "Institut Gustave Roussy (France)",
+              "MD Anderson (USA)"
+            ],
+            "primary_endpoint": "Objective Response Rate",
+            "enrollment": 240,
+            "estimated_completion": "2028-06"
+          },
+          {
+            "nct_id": "NCT06123456",
+            "title": "Digital Twin-Guided Combination Therapy for HER2+ Breast Cancer",
+            "phase": "Phase I/II",
+            "status": "Not yet recruiting",
+            "locations": [
+              "Institut Curie (France)"
+            ],
+            "primary_endpoint": "Safety & Dose-Limiting Toxicity",
+            "enrollment": 60,
+            "estimated_completion": "2027-12"
+          }
+        ],
+        "patient_eligibility_summary": "Based on Pancreatic Ductal Adenocarcinoma with Trastuzumab: ~4662 eligible patients in France"
+      },
+      "duration": 0
+    },
+    "grants": {
+      "taskId": "36cf74d3-0ccb-41cf-b886-14f7b9f3e883",
+      "agentId": "grant-writer",
+      "tool": "scan_grants",
+      "result": {
+        "keywords": "Pancreatic Ductal Adenocarcinoma AI multi-agent digital twin",
+        "region": "EU",
+        "opportunities": [
+          {
+            "id": "HORIZON-MISS-2026-02-CANCER-01",
+            "title": "Virtual Human Twin models for cancer research",
+            "body": "EU Horizon Europe",
+            "budget": "€6-10M per consortium",
+            "deadline": "2026-09-15",
+            "fit_score": 0.97,
+            "action": "Form consortium — PI + 3 academic partners needed"
+          },
+          {
+            "id": "DIGITAL-2026-AI-09",
+            "title": "AI-based solutions in cancer medical imaging",
+            "body": "EU Digital Europe",
+            "budget": "€2-5M",
+            "deadline": "2026-Q3",
+            "fit_score": 0.91,
+            "action": "Direct application — SME eligible"
+          },
+          {
+            "id": "BPI-DEEPTECH-2026",
+            "title": "Deep Tech Innovation Grant",
+            "body": "BPI France",
+            "budget": "€500K-3M",
+            "deadline": "Rolling",
+            "fit_score": 0.94,
+            "action": "Apply immediately — French EURL eligible"
+          },
+          {
+            "id": "EIC-PATHFINDER-AI-CANCER",
+            "title": "Generative AI agents for cancer diagnosis",
+            "body": "European Innovation Council",
+            "budget": "€3-4M",
+            "deadline": "2025-10 (next cycle 2026)",
+            "fit_score": 0.89,
+            "action": "Prepare for 2026 cycle — Early submission recommended"
+          },
+          {
+            "id": "NCI-ITCR-R21",
+            "title": "Informatics Technology for Cancer Research",
+            "body": "NIH / NCI (USA)",
+            "budget": "$275K over 2 years",
+            "deadline": "Multiple cycles",
+            "fit_score": 0.83,
+            "action": "US collaborator needed — identify partner at UCSF/MIT"
+          }
+        ],
+        "next_steps": "Prioritize BPI France (rolling, highest immediate ROI) and HORIZON-MISS-2026-02-CANCER-01 (largest budget, Sep deadline)"
+      },
+      "duration": 0
+    }
+  }
+}

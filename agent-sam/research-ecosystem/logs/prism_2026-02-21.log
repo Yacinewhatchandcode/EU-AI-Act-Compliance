@@ -1,0 +1,158 @@
+ℹ️ [2026-02-21T09:49:24.504Z] PRISM-Onco Multi-Agent Cancer Research System initialized
+ℹ️ [2026-02-21T09:49:24.508Z] Agents online: 8
+ℹ️ [2026-02-21T09:49:24.509Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:24.510Z] Starting PRISM-Onco Research Pipeline
+ℹ️ [2026-02-21T09:49:24.510Z] Cancer: HER2+ Breast Cancer | Sample: TCGA-BRCA-A7-A0DA
+ℹ️ [2026-02-21T09:49:24.511Z] ════════════════════════════════════════════════════════════
+
+ℹ️ [2026-02-21T09:49:24.512Z] 📍 Step 1/7: Genomics Analysis
+ℹ️ [2026-02-21T09:49:24.513Z] Task fa0c9cb9-2caa-4e3c-88ef-e71d1b080046: 🧬 Genomics Analyst → variant_call({"sample_id":"TCGA-BRCA-A7-A0DA","ref_genome":"GRCh38","caller":"deepvariant"})
+✅ [2026-02-21T09:49:24.514Z] Task fa0c9cb9-2caa-4e3c-88ef-e71d1b080046 completed in 1ms
+ℹ️ [2026-02-21T09:49:24.515Z] Task 720e9e50-7765-4830-baf8-f122ca39fa17: 🧬 Genomics Analyst → mutation_signature({"sample_id":"TCGA-BRCA-A7-A0DA"})
+✅ [2026-02-21T09:49:24.516Z] Task 720e9e50-7765-4830-baf8-f122ca39fa17 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.517Z] 📍 Step 2/7: Proteomics Analysis
+ℹ️ [2026-02-21T09:49:24.517Z] Task 5cd8df57-fc66-4189-9afe-dac27ec8c3ce: 🔬 Proteomics Expert → identify_targets({"cancer_type":"HER2+ Breast Cancer","sample_id":"TCGA-BRCA-A7-A0DA"})
+✅ [2026-02-21T09:49:24.518Z] Task 5cd8df57-fc66-4189-9afe-dac27ec8c3ce completed in 0ms
+ℹ️ [2026-02-21T09:49:24.518Z] 📍 Step 3/7: Literature Mining
+ℹ️ [2026-02-21T09:49:24.519Z] Task d3b7b2e3-b2ae-4227-a21d-d4d2004d3725: 📚 Literature Miner → search_literature({"query":"HER2+ Breast Cancer multi-agent AI drug discovery 2026","max_results":50})
+✅ [2026-02-21T09:49:24.519Z] Task d3b7b2e3-b2ae-4227-a21d-d4d2004d3725 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.519Z] Task 7078ee2a-1221-4279-b849-dc3da7cb67da: 📚 Literature Miner → build_knowledge_graph({"topic":"HER2+ Breast Cancer","depth":3})
+✅ [2026-02-21T09:49:24.520Z] Task 7078ee2a-1221-4279-b849-dc3da7cb67da completed in 0ms
+ℹ️ [2026-02-21T09:49:24.520Z] 📍 Step 4/7: Pathway Analysis
+ℹ️ [2026-02-21T09:49:24.521Z] Task 5b3c56a5-8cf2-4b43-8960-6a778b20e216: 🗺️ Pathway Mapper → analyze_pathway({"pathway":"RTK-RAS-MAPK","cancer_type":"HER2+ Breast Cancer","mutations":"BRCA1, TP53, PIK3CA"})
+✅ [2026-02-21T09:49:24.522Z] Task 5b3c56a5-8cf2-4b43-8960-6a778b20e216 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.522Z] 📍 Step 5/7: Drug Design
+ℹ️ [2026-02-21T09:49:24.522Z] Task 5ce3b9fe-e4c3-453b-b062-1e3ea7942388: 💊 Drug Design Architect → design_molecule({"target_protein":"HER2/ERBB2","mechanism":"reversible inhibitor","constraints":"oral bioavailability > 0.5, hERG clean"})
+✅ [2026-02-21T09:49:24.523Z] Task 5ce3b9fe-e4c3-453b-b062-1e3ea7942388 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.523Z] 📍 Step 6/7: Digital Twin Simulation
+ℹ️ [2026-02-21T09:49:24.524Z] Task 05c874fa-5b08-4887-bd59-42fc3a8d4209: 🧪 Digital Twin Simulator → simulate_treatment({"patient_profile":"HER2+ Breast Cancer_TCGA-BRCA-A7-A0DA","treatment":"PRISM-001","duration_weeks":12})
+✅ [2026-02-21T09:49:24.524Z] Task 05c874fa-5b08-4887-bd59-42fc3a8d4209 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.525Z] 📍 Step 7/7: Clinical & Grant Analysis
+ℹ️ [2026-02-21T09:49:24.525Z] Task 0b57018a-18b8-4ea8-9138-a039b39bfa32: 🏥 Clinical Trial Analyst → search_trials({"condition":"HER2+ Breast Cancer","intervention":"Trastuzumab","phase":"II"})
+✅ [2026-02-21T09:49:24.526Z] Task 0b57018a-18b8-4ea8-9138-a039b39bfa32 completed in 0ms
+ℹ️ [2026-02-21T09:49:24.526Z] Task 7bb1ac73-15ca-4b3a-b529-a2f78a42443e: 📝 Grant Writer & SEO Engine → scan_grants({"keywords":"HER2+ Breast Cancer AI multi-agent digital twin","region":"EU"})
+✅ [2026-02-21T09:49:24.527Z] Task 7bb1ac73-15ca-4b3a-b529-a2f78a42443e completed in 0ms
+ℹ️ [2026-02-21T09:49:24.527Z] 
+📊 Generating Research Summary...
+✅ [2026-02-21T09:49:24.528Z] 📄 Full results saved to: C:\Users\Mr Robot\YBE\agent-sam\research-ecosystem\output\prism_HER2+_Breast_Cancer_1771667364528.json
+ℹ️ [2026-02-21T09:49:24.529Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:24.529Z] PRISM-Onco Pipeline Complete!
+ℹ️ [2026-02-21T09:49:24.530Z] Cancer: HER2+ Breast Cancer
+ℹ️ [2026-02-21T09:49:24.530Z] Variants: 28696 | TMB: 10.3
+ℹ️ [2026-02-21T09:49:24.530Z] Top Target: HER2/ERBB2
+ℹ️ [2026-02-21T09:49:24.531Z] Drug Candidate: PRISM-001 (2.3 nM)
+ℹ️ [2026-02-21T09:49:24.532Z] Predicted Response: Partial Response (PR)
+ℹ️ [2026-02-21T09:49:24.532Z] Matching Trials: 2
+ℹ️ [2026-02-21T09:49:24.533Z] Grant Opportunities: 5
+ℹ️ [2026-02-21T09:49:24.533Z] ════════════════════════════════════════════════════════════
+
+ℹ️ [2026-02-21T09:49:47.951Z] PRISM-Onco Multi-Agent Cancer Research System initialized
+ℹ️ [2026-02-21T09:49:47.955Z] Agents online: 8
+ℹ️ [2026-02-21T09:49:47.956Z] Task 61d77b9c-2e10-41fb-aa0a-6599d4d93576: 📝 Grant Writer & SEO Engine → scan_grants({"keywords":"cancer multi-agent digital twin AI","region":"EU"})
+✅ [2026-02-21T09:49:47.958Z] Task 61d77b9c-2e10-41fb-aa0a-6599d4d93576 completed in 1ms
+ℹ️ [2026-02-21T09:49:48.114Z] PRISM-Onco Multi-Agent Cancer Research System initialized
+ℹ️ [2026-02-21T09:49:48.119Z] Agents online: 8
+ℹ️ [2026-02-21T09:49:48.120Z] Task 2b702f8d-c378-4379-a24a-ad40221d787a: 📝 Grant Writer & SEO Engine → generate_seo_article({"topic":"Multi-Agent AI in Precision Oncology","target_keyword":"AI cancer drug discovery 2026","word_count":2000})
+✅ [2026-02-21T09:49:48.123Z] Task 2b702f8d-c378-4379-a24a-ad40221d787a completed in 2ms
+ℹ️ [2026-02-21T09:49:58.868Z] PRISM-Onco Multi-Agent Cancer Research System initialized
+ℹ️ [2026-02-21T09:49:58.872Z] Agents online: 8
+ℹ️ [2026-02-21T09:49:58.873Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:58.873Z] Starting PRISM-Onco Research Pipeline
+ℹ️ [2026-02-21T09:49:58.874Z] Cancer: NSCLC EGFR-mutated | Sample: TCGA-LUAD-55-7907
+ℹ️ [2026-02-21T09:49:58.875Z] ════════════════════════════════════════════════════════════
+
+ℹ️ [2026-02-21T09:49:58.876Z] 📍 Step 1/7: Genomics Analysis
+ℹ️ [2026-02-21T09:49:58.877Z] Task 63a1f012-f597-4971-b304-9660331ce6f8: 🧬 Genomics Analyst → variant_call({"sample_id":"TCGA-LUAD-55-7907","ref_genome":"GRCh38","caller":"deepvariant"})
+✅ [2026-02-21T09:49:58.878Z] Task 63a1f012-f597-4971-b304-9660331ce6f8 completed in 0ms
+ℹ️ [2026-02-21T09:49:58.878Z] Task e30c712b-6ce1-447c-9074-a0a876336168: 🧬 Genomics Analyst → mutation_signature({"sample_id":"TCGA-LUAD-55-7907"})
+✅ [2026-02-21T09:49:58.879Z] Task e30c712b-6ce1-447c-9074-a0a876336168 completed in 0ms
+ℹ️ [2026-02-21T09:49:58.880Z] 📍 Step 2/7: Proteomics Analysis
+ℹ️ [2026-02-21T09:49:58.881Z] Task 43277083-b155-49df-8652-55f41eab72c0: 🔬 Proteomics Expert → identify_targets({"cancer_type":"NSCLC EGFR-mutated","sample_id":"TCGA-LUAD-55-7907"})
+✅ [2026-02-21T09:49:58.881Z] Task 43277083-b155-49df-8652-55f41eab72c0 completed in 0ms
+ℹ️ [2026-02-21T09:49:58.882Z] 📍 Step 3/7: Literature Mining
+ℹ️ [2026-02-21T09:49:58.882Z] Task 54c6f379-0d61-4c63-a4aa-7c163e8a9938: 📚 Literature Miner → search_literature({"query":"NSCLC EGFR-mutated multi-agent AI drug discovery 2026","max_results":50})
+✅ [2026-02-21T09:49:58.883Z] Task 54c6f379-0d61-4c63-a4aa-7c163e8a9938 completed in 0ms
+ℹ️ [2026-02-21T09:49:58.884Z] Task 546068aa-40a3-4edf-951c-355df375a8f2: 📚 Literature Miner → build_knowledge_graph({"topic":"NSCLC EGFR-mutated","depth":3})
+✅ [2026-02-21T09:49:58.884Z] Task 546068aa-40a3-4edf-951c-355df375a8f2 completed in 0ms
+ℹ️ [2026-02-21T09:49:58.885Z] 📍 Step 4/7: Pathway Analysis
+ℹ️ [2026-02-21T09:49:58.885Z] Task b15b5d36-ef96-4b76-9cf5-d5e5bfea0cb5: 🗺️ Pathway Mapper → analyze_pathway({"pathway":"RTK-RAS-MAPK","cancer_type":"NSCLC EGFR-mutated","mutations":"BRCA1, TP53, PIK3CA"})
+✅ [2026-02-21T09:49:58.886Z] Task b15b5d36-ef96-4b76-9cf5-d5e5bfea0cb5 completed in 1ms
+ℹ️ [2026-02-21T09:49:58.886Z] 📍 Step 5/7: Drug Design
+ℹ️ [2026-02-21T09:49:58.886Z] Task a25eb8d9-619c-4310-9c67-3e095fdc276c: 💊 Drug Design Architect → design_molecule({"target_protein":"HER2/ERBB2","mechanism":"reversible inhibitor","constraints":"oral bioavailability > 0.5, hERG clean"})
+✅ [2026-02-21T09:49:58.887Z] Task a25eb8d9-619c-4310-9c67-3e095fdc276c completed in 0ms
+ℹ️ [2026-02-21T09:49:58.887Z] 📍 Step 6/7: Digital Twin Simulation
+ℹ️ [2026-02-21T09:49:58.888Z] Task dec7b283-7cfa-4366-b09c-4ada20a40c17: 🧪 Digital Twin Simulator → simulate_treatment({"patient_profile":"NSCLC EGFR-mutated_TCGA-LUAD-55-7907","treatment":"PRISM-001","duration_weeks":12})
+✅ [2026-02-21T09:49:58.889Z] Task dec7b283-7cfa-4366-b09c-4ada20a40c17 completed in 1ms
+ℹ️ [2026-02-21T09:49:58.889Z] 📍 Step 7/7: Clinical & Grant Analysis
+ℹ️ [2026-02-21T09:49:58.889Z] Task cebcc923-cd19-424a-bc27-a5a5aa2b693c: 🏥 Clinical Trial Analyst → search_trials({"condition":"NSCLC EGFR-mutated","intervention":"Trastuzumab","phase":"II"})
+✅ [2026-02-21T09:49:58.890Z] Task cebcc923-cd19-424a-bc27-a5a5aa2b693c completed in 0ms
+ℹ️ [2026-02-21T09:49:58.890Z] Task e1bdd96e-447e-4ec8-a3e4-045de1aa2d3c: 📝 Grant Writer & SEO Engine → scan_grants({"keywords":"NSCLC EGFR-mutated AI multi-agent digital twin","region":"EU"})
+✅ [2026-02-21T09:49:58.892Z] Task e1bdd96e-447e-4ec8-a3e4-045de1aa2d3c completed in 0ms
+ℹ️ [2026-02-21T09:49:58.892Z] 
+📊 Generating Research Summary...
+✅ [2026-02-21T09:49:58.894Z] 📄 Full results saved to: C:\Users\Mr Robot\YBE\agent-sam\research-ecosystem\output\prism_NSCLC_EGFR-mutated_1771667398893.json
+ℹ️ [2026-02-21T09:49:58.894Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:58.895Z] PRISM-Onco Pipeline Complete!
+ℹ️ [2026-02-21T09:49:58.895Z] Cancer: NSCLC EGFR-mutated
+ℹ️ [2026-02-21T09:49:58.896Z] Variants: 11464 | TMB: 5.3
+ℹ️ [2026-02-21T09:49:58.896Z] Top Target: HER2/ERBB2
+ℹ️ [2026-02-21T09:49:58.897Z] Drug Candidate: PRISM-001 (2.3 nM)
+ℹ️ [2026-02-21T09:49:58.897Z] Predicted Response: Partial Response (PR)
+ℹ️ [2026-02-21T09:49:58.898Z] Matching Trials: 2
+ℹ️ [2026-02-21T09:49:58.898Z] Grant Opportunities: 5
+ℹ️ [2026-02-21T09:49:58.898Z] ════════════════════════════════════════════════════════════
+
+ℹ️ [2026-02-21T09:49:59.014Z] PRISM-Onco Multi-Agent Cancer Research System initialized
+ℹ️ [2026-02-21T09:49:59.018Z] Agents online: 8
+ℹ️ [2026-02-21T09:49:59.019Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:59.020Z] Starting PRISM-Onco Research Pipeline
+ℹ️ [2026-02-21T09:49:59.021Z] Cancer: Pancreatic Ductal Adenocarcinoma | Sample: TCGA-PAAD-FB-A4P5
+ℹ️ [2026-02-21T09:49:59.022Z] ════════════════════════════════════════════════════════════
+
+ℹ️ [2026-02-21T09:49:59.022Z] 📍 Step 1/7: Genomics Analysis
+ℹ️ [2026-02-21T09:49:59.023Z] Task c276e888-732b-4bf3-b5a8-2e7b7a22ab25: 🧬 Genomics Analyst → variant_call({"sample_id":"TCGA-PAAD-FB-A4P5","ref_genome":"GRCh38","caller":"deepvariant"})
+✅ [2026-02-21T09:49:59.025Z] Task c276e888-732b-4bf3-b5a8-2e7b7a22ab25 completed in 1ms
+ℹ️ [2026-02-21T09:49:59.026Z] Task e84192d5-7d98-4428-9805-fa826f5f830c: 🧬 Genomics Analyst → mutation_signature({"sample_id":"TCGA-PAAD-FB-A4P5"})
+✅ [2026-02-21T09:49:59.027Z] Task e84192d5-7d98-4428-9805-fa826f5f830c completed in 0ms
+ℹ️ [2026-02-21T09:49:59.027Z] 📍 Step 2/7: Proteomics Analysis
+ℹ️ [2026-02-21T09:49:59.028Z] Task 8cd0d54e-0eb6-4777-b1fd-ca80f3dbccdd: 🔬 Proteomics Expert → identify_targets({"cancer_type":"Pancreatic Ductal Adenocarcinoma","sample_id":"TCGA-PAAD-FB-A4P5"})
+✅ [2026-02-21T09:49:59.028Z] Task 8cd0d54e-0eb6-4777-b1fd-ca80f3dbccdd completed in 0ms
+ℹ️ [2026-02-21T09:49:59.029Z] 📍 Step 3/7: Literature Mining
+ℹ️ [2026-02-21T09:49:59.029Z] Task f5e20757-afce-48fe-8eb5-f9a4f7981b92: 📚 Literature Miner → search_literature({"query":"Pancreatic Ductal Adenocarcinoma multi-agent AI drug discovery 2026","max_results":50})
+✅ [2026-02-21T09:49:59.030Z] Task f5e20757-afce-48fe-8eb5-f9a4f7981b92 completed in 0ms
+ℹ️ [2026-02-21T09:49:59.030Z] Task a24cddbf-9515-4644-b5d3-eeb0e16576fd: 📚 Literature Miner → build_knowledge_graph({"topic":"Pancreatic Ductal Adenocarcinoma","depth":3})
+✅ [2026-02-21T09:49:59.031Z] Task a24cddbf-9515-4644-b5d3-eeb0e16576fd completed in 1ms
+ℹ️ [2026-02-21T09:49:59.031Z] 📍 Step 4/7: Pathway Analysis
+ℹ️ [2026-02-21T09:49:59.031Z] Task 36da3966-277d-4e9c-81b1-67023d37d340: 🗺️ Pathway Mapper → analyze_pathway({"pathway":"RTK-RAS-MAPK","cancer_type":"Pancreatic Ductal Adenocarcinoma","mutations":"BRCA1, TP53, PIK3CA"})
+✅ [2026-02-21T09:49:59.032Z] Task 36da3966-277d-4e9c-81b1-67023d37d340 completed in 0ms
+ℹ️ [2026-02-21T09:49:59.033Z] 📍 Step 5/7: Drug Design
+ℹ️ [2026-02-21T09:49:59.033Z] Task 17e51ddf-e496-43bf-b4d6-6e2210816824: 💊 Drug Design Architect → design_molecule({"target_protein":"HER2/ERBB2","mechanism":"reversible inhibitor","constraints":"oral bioavailability > 0.5, hERG clean"})
+✅ [2026-02-21T09:49:59.034Z] Task 17e51ddf-e496-43bf-b4d6-6e2210816824 completed in 0ms
+ℹ️ [2026-02-21T09:49:59.034Z] 📍 Step 6/7: Digital Twin Simulation
+ℹ️ [2026-02-21T09:49:59.034Z] Task e6db8153-0cb1-4841-ae23-7293d585819a: 🧪 Digital Twin Simulator → simulate_treatment({"patient_profile":"Pancreatic Ductal Adenocarcinoma_TCGA-PAAD-FB-A4P5","treatment":"PRISM-001","duration_weeks":12})
+✅ [2026-02-21T09:49:59.035Z] Task e6db8153-0cb1-4841-ae23-7293d585819a completed in 0ms
+ℹ️ [2026-02-21T09:49:59.036Z] 📍 Step 7/7: Clinical & Grant Analysis
+ℹ️ [2026-02-21T09:49:59.036Z] Task 76305dec-2b48-410a-98bc-8bd1a77315d0: 🏥 Clinical Trial Analyst → search_trials({"condition":"Pancreatic Ductal Adenocarcinoma","intervention":"Trastuzumab","phase":"II"})
+✅ [2026-02-21T09:49:59.036Z] Task 76305dec-2b48-410a-98bc-8bd1a77315d0 completed in 0ms
+ℹ️ [2026-02-21T09:49:59.037Z] Task 36cf74d3-0ccb-41cf-b886-14f7b9f3e883: 📝 Grant Writer & SEO Engine → scan_grants({"keywords":"Pancreatic Ductal Adenocarcinoma AI multi-agent digital twin","region":"EU"})
+✅ [2026-02-21T09:49:59.037Z] Task 36cf74d3-0ccb-41cf-b886-14f7b9f3e883 completed in 0ms
+ℹ️ [2026-02-21T09:49:59.038Z] 
+📊 Generating Research Summary...
+✅ [2026-02-21T09:49:59.039Z] 📄 Full results saved to: C:\Users\Mr Robot\YBE\agent-sam\research-ecosystem\output\prism_Pancreatic_Ductal_Adenocarcinoma_1771667399038.json
+ℹ️ [2026-02-21T09:49:59.040Z] 
+════════════════════════════════════════════════════════════
+ℹ️ [2026-02-21T09:49:59.040Z] PRISM-Onco Pipeline Complete!
+ℹ️ [2026-02-21T09:49:59.086Z] Cancer: Pancreatic Ductal Adenocarcinoma
+ℹ️ [2026-02-21T09:49:59.089Z] Variants: 40648 | TMB: 14.4
+ℹ️ [2026-02-21T09:49:59.093Z] Top Target: HER2/ERBB2
+ℹ️ [2026-02-21T09:49:59.109Z] Drug Candidate: PRISM-001 (2.3 nM)
+ℹ️ [2026-02-21T09:49:59.122Z] Predicted Response: Partial Response (PR)
+ℹ️ [2026-02-21T09:49:59.126Z] Matching Trials: 2
+ℹ️ [2026-02-21T09:49:59.129Z] Grant Opportunities: 5
+ℹ️ [2026-02-21T09:49:59.139Z] ════════════════════════════════════════════════════════════
+
