@@ -22,6 +22,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
+    <!-- Google OAuth GSI -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -51,14 +53,15 @@
             <div class="screen-scroll">
                 <header class="home-header">
                     <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
-                        <div class="home-logo">🇪🇺</div>
+                        <div class="home-logo">💎</div>
+                        <div class="brand-title" style="font-weight:900; font-size:1.4rem; letter-spacing:-1px;">
+                            PRIME.AI <span
+                                style="color:var(--primary); font-size:0.8rem; font-weight:400; vertical-align:middle;">COMMAND
+                                CENTER</span></div>
                         <div class="user-info" id="userInfo" style="display:none" onclick="logout()">
                             <span class="user-name"></span>
-                            <span class="user-logout">🚪</span>
                         </div>
                     </div>
-                    <h1>EU AI Act</h1>
-                    <p class="home-sub">Universal AI Compliance Scanner</p>
                 </header>
 
                 <!-- Countdown -->
@@ -110,10 +113,20 @@
                         <span class="ac-title">Roadmap</span>
                         <span class="ac-desc">Action Plan</span>
                     </button>
+                    <button class="action-card ac-mica ripple" onclick="go('mica')">
+                        <span class="ac-icon">🪙</span>
+                        <span class="ac-title">MiCA Scanner</span>
+                        <span class="ac-desc">Crypto Compliance</span>
+                    </button>
                     <button class="action-card ac-kb ripple" onclick="go('kb')">
                         <span class="ac-icon">📚</span>
                         <span class="ac-title">Knowledge</span>
                         <span class="ac-desc">Full Regulation</span>
+                    </button>
+                    <button class="action-card ac-wallet ripple" onclick="go('wallet')">
+                        <span class="ac-icon">💎</span>
+                        <span class="ac-title">Wallet</span>
+                        <span class="ac-desc">$PRIME Earnings</span>
                     </button>
                 </div>
 
@@ -127,6 +140,21 @@
                             class="stat-l">Exigences</span></div>
                     <div class="stat"><span class="stat-n" style="color:var(--purple)">5</span><span
                             class="stat-l">Agents</span></div>
+                </div>
+
+                <!-- Wallet Intro -->
+                <div class="card glass">
+                    <div id="walletStatusHeader">
+                        <div class="res-header">
+                            <span class="res-badge low">Simulation Mode</span>
+                            <button class="btn primary ripple" id="connectWalletBtn"
+                                onclick="connectCoinbaseWallet()">Connect Coinbase Wallet</button>
+                        </div>
+                    </div>
+                    <div class="wallet-hero">
+                        <h1 id="walletBalance">1,000.00</h1>
+                        <span class="currency">$PRIME</span>
+                    </div>
                 </div>
 
                 <!-- Timeline -->
@@ -358,6 +386,122 @@
             </div>
         </section>
 
+        <!-- ═══════ WALLET ═══════ -->
+        <section class="screen" id="screen-wallet">
+            <div class="screen-scroll">
+                <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                    <h2>💎 $PRIME Wallet</h2>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="wallet-card">
+                    <div class="wc-label">TOTAL BALANCE</div>
+                    <div class="wc-balance"><span id="walletBalance">0.00</span> <span class="wc-cur">$PRIME</span>
+                    </div>
+                    <div class="wc-address" id="walletAddress">0x...</div>
+                    <div class="wc-actions">
+                        <button class="wc-btn ripple" id="genBtn" onclick="doGenerateRevenue()">⚡ Generate</button>
+                        <button class="wc-btn ripple" onclick="snack('Soon: Withdraw to Base')">📤 Withdraw</button>
+                    </div>
+                </div>
+
+                <!-- Agents Activity -->
+                <div class="stat-card">
+                    <h4>Revenue Earning</h4>
+                    <div class="val" id="wallet-balance">€0.00</div>
+                    <div class="label" id="wallet-status">Operational</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Stripe Integration</h4>
+                    <div class="val" id="stripe-status">Not Connected</div>
+                    <button class="btn btn-sm" onclick="doConnectStripe()">Connect Live</button>
+                </div>
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>🤖 CEO Autonomous Agent</h3>
+                        <button class="btn btn-sm" id="ceoBtn" onclick="toggleCEO()">Start Auto-Mode</button>
+                    </div>
+                    <div id="ceo-status" style="margin-top:0.5rem; font-size:0.8rem; color:#888;">System: Idle</div>
+                    <div id="ceo-feed"
+                        style="margin-top:1rem; height:150px; overflow-y:auto; font-family:monospace; font-size:0.75rem; background:rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+                        <div style="color:#666">No activity logs...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🤖 Power Agents</h3>
+                    <div class="agent-grid">
+                        <div class="agent-mini-card" id="agent-openclaw">
+                            <div class="amc-icon">🕷️</div>
+                            <div class="amc-info">
+                                <b>OpenClaw</b>
+                                <span class="amc-status">Idle</span>
+                            </div>
+                        </div>
+                        <div class="agent-mini-card" id="agent-picoclaw">
+                            <div class="amc-icon">🦂</div>
+                            <div class="amc-info">
+                                <b>PicoClaw</b>
+                                <span class="amc-status">Idle</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="card">
+                    <h3>📜 Earnings History</h3>
+                    <div id="walletHistory" class="history-list">
+                        <div class="h-empty">No transactions yet</div>
+                    </div>
+                </div>
+
+                <!-- B2B Leads -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🏢 High-Value Leads</h3>
+                        <button class="chip primary" onclick="doProspecting()">Find More</button>
+                    </div>
+                    <div id="leadList" class="history-list">
+                        <div class="h-empty">Run prospecting to find clients</div>
+                    </div>
+                </div>
+            </div>
+            <!-- ═══════ MiCA SCANNER ═══════ -->
+            <section class="screen" id="screen-mica">
+                <div class="screen-scroll">
+                    <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                        <h2>🪙 MiCA Crypto Scanner</h2>
+                    </div>
+                    <div class="card">
+                        <p class="t3">Scan crypto project descriptions or whitepaper snippets for EU MiCA compliance
+                            requirements.</p>
+                        <div class="input-group">
+                            <textarea id="micaInput" placeholder="Paste project description or whitepaper text here..."
+                                rows="5"></textarea>
+                        </div>
+                        <button class="btn primary ripple" id="micaBtn" onclick="doMicaScan()">Analyze for MiCA</button>
+                    </div>
+                    <div id="micaResults" class="mica-results"></div>
+                </div>
+                <!-- ═══════ LEADS ═══════ -->
+                <section class="screen" id="screen-leads">
+                    <div class="screen-scroll">
+                        <div class="topbar"><button class="back-btn" onclick="go('home')">←</button>
+                            <h2>📊 B2B Sales Leads</h2>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🏢 Compliance Prospects</h3>
+                                <button class="chip primary" onclick="doProspecting()">Find More</button>
+                            </div>
+                            <div id="leadsDashboard" class="history-list">
+                                <div class="h-empty">No leads yet. Run PicoClaw to find some.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
     </div>
 
     <!-- ═══ BOTTOM NAV ═══ -->
@@ -382,11 +526,22 @@
             <span class="nav-icon">📚</span>
             <span class="nav-label">Knowledge</span>
         </button>
+        <button class="nav-item" onclick="go('wallet')" data-screen="wallet">
+            <span class="nav-icon">💎</span>
+            <span class="nav-label">Wallet</span>
+        </button>
+        <button class="nav-item" onclick="go('leads')" data-screen="leads">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Leads</span>
+        </button>
     </nav>
 
     <!-- ═══ SNACKBAR ═══ -->
     <div id="snackbar" class="snackbar" style="display:none"></div>
 
+    <!-- ═══ SCRIPTS ═══ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <script src="https://unpkg.com/@coinbase/wallet-sdk@3.7.1/dist/index.js"></script>
     <script src="/app.js"></script>
 </body>
 

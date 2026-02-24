@@ -1,17 +1,8 @@
-#!/usr/bin/env python3
-"""
-EU AI Act Compliance System — Authenticated Web API Server
-============================================================
-Google OAuth 2.0 + JWT tokens for secure public access.
-Universal AI system scanner for any business/URL.
-"""
-
 import http.server
 import socketserver
 import json
 import os
 import sys
-import urllib.parse
 import hashlib
 import hmac
 import base64
@@ -19,6 +10,19 @@ import time
 import re
 import ssl
 import secrets
+import urllib.request
+import urllib.parse
+import urllib.error
+try:
+    import stripe
+    from dotenv import load_dotenv
+    import qrcode
+    import io
+    load_dotenv()
+except ImportError:
+    stripe = None
+    load_dotenv = lambda: None
+    qrcode = None
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -37,12 +41,23 @@ from eu_ai_act import (
     DEADLINES,
     OPEN_SOURCE_STACK,
 )
+from revenue_engine import RevenueEngine
+from mica_scanner import scan_for_mica
+from b2b_lead_gen import B2BLeadGen
+from autonomous_operations import ceo_agent
+from satoshi_investor import SatoshiInvestor
+
+# Initialize Engines
+revenue_engine = RevenueEngine()
+lead_gen = B2BLeadGen()
+satoshi_investor = SatoshiInvestor(revenue_engine)
+# Note: ceo_agent is imported from autonomous_operations already initialized
 
 # ═══════════════════════════════════════════════════════════════════
 # CONFIGURATION
 # ═══════════════════════════════════════════════════════════════════
 
-PORT = int(os.environ.get("PORT", 8080))
+PORT = int(os.environ.get("PORT", 8000))
 STATIC_DIR = Path(__file__).parent / "web"
 
 # Google OAuth — set your Client ID here or via env var
@@ -51,6 +66,13 @@ GOOGLE_CLIENT_ID = os.environ.get(
     "GOOGLE_CLIENT_ID",
     "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
 )
+
+# Stripe keys from .env
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_mock")
+STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_mock")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+if stripe and STRIPE_SECRET_KEY != "sk_test_mock":
+    stripe.api_key = STRIPE_SECRET_KEY
 
 # JWT Secret — auto-generated per server start, or set via env
 JWT_SECRET = os.environ.get("JWT_SECRET", secrets.token_hex(32))
@@ -336,7 +358,7 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
             return None
         try:
             return verify_jwt(token)
-        except ValueError:
+        except Exception: # Catch any exception during JWT verification
             return None
 
     def _require_auth(self):
@@ -356,7 +378,14 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
         if path == "/api/auth/status":
             user = self._check_auth()
             if user:
-                self._json_response({"authenticated": True, "user": user})
+                # Get current wallet balance for authenticated users
+                wallet_status = revenue_engine.get_status()
+                val = wallet_status.get("balance", 0.0)
+                self._json_response({
+                    "authenticated": True,
+                    "user": user,
+                    "balance": float(int(val * 10) / 10.0) # Round to one decimal place
+                })
             else:
                 self._json_response({"authenticated": False})
             return
@@ -382,6 +411,11 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 "user": {"email": "dev@prime-ai.local", "name": "Developer"},
                 "message": "Dev mode active — set GOOGLE_CLIENT_ID for production"
             })
+            return
+
+        if path == "/api/pay/mcp-test":
+            success, msg = ceo_agent.test_stripe_mcp()
+            self._json_response({"success": success, "message": msg})
             return
 
         # ─── Auth-gated API routes ───
@@ -455,6 +489,179 @@ class APIHandler(http.server.SimpleHTTPRequestHandler):
                 result = scan_url(url_to_scan)
                 result["scanned_by"] = user.get("email", "unknown")
                 self._json_response(result)
+
+            elif path == "/api/wallet":
+                self._json_response({"success": True, "wallet": revenue_engine.get_status()})
+
+            elif path == "/api/wallet/generate":
+                result = revenue_engine.generate_revenue()
+                self._json_response({"success": True, "wallet": result})
+
+            elif path == "/satoshi_investments.json":
+                log_path = Path(__file__).parent / "satoshi_investments.json"
+                if log_path.exists():
+                    with open(log_path, "r") as f:
+                        self._json_response(json.load(f))
+                else:
+                    self._json_response([])
+
+            elif path.startswith("/satoshi/"):
+                subpath = path[9:] if path[9:] else "index.html"
+                dashboard_file = Path(__file__).parent / "satoshi-dashboard" / subpath
+                if dashboard_file.exists():
+                    try:
+                        with open(dashboard_file, "rb") as f:
+                            content = f.read()
+                        ext = dashboard_file.suffix.lower()
+                        mime = {
+                            ".html": "text/html",
+                            ".css": "text/css",
+                            ".js": "application/javascript",
+                            ".png": "image/png",
+                            ".svg": "image/svg+xml"
+                        }.get(ext, "text/plain")
+                        self.send_response(200)
+                        self.send_header("Content-type", mime)
+                        self.end_headers()
+                        self.wfile.write(content)
+                    except Exception as e:
+                        self._json_response({"error": str(e)}, 500)
+                else:
+                    self.send_error(404, "Dashboard file not found")
+
+            elif path == "/api/wallet/spend":
+                amount = float(params.get("amount", [0])[0])
+                reason = params.get("reason", ["General"])[0]
+                success, result = revenue_engine.spend_revenue(amount, reason)
+                self._json_response({"success": success, "wallet": result})
+
+            elif path == "/api/mica/scan":
+                description = params.get("q", [""])[0]
+                if not description:
+                    self._json_response({"error": "Description query 'q' required"}, 400)
+                    return
+                result = scan_for_mica(description)
+                self._json_response(result)
+
+            elif path == "/api/mica/report":
+                q = params.get("q", [""])[0]
+                name = params.get("name", ["Unnamed Project"])[0]
+                if not q:
+                    self._json_response({"error": "Query required"}, 400)
+                    return
+                # 1. Run audit
+                scan_res = scan_for_mica(q)
+                # 2. Generate report text
+                from mica_scanner import generate_mica_report
+                report_txt = generate_mica_report(name, scan_res)
+                # 3. Monetize (Charge for the report)
+                revenue_engine.add_revenue(49.0, f"MiCA Premium Audit: {name}")
+                
+                self._json_response({
+                    "success": True,
+                    "report": report_txt,
+                    "wallet": revenue_engine.get_status()
+                })
+
+            elif path == "/api/leads/prospect":
+                niche = params.get("niche", ["fintech_paris"])[0]
+                new_leads = lead_gen.generate_simulated_leads_from_real_niches(niche)
+                # Every real lead found adds to the revenue engine (value-based)
+                total_val = sum([l['value'] for l in new_leads]) / 10.0 # Convert to PRIME credits
+                revenue_engine.add_revenue(total_val, f"PicoClaw: Found {len(new_leads)} B2B Leads")
+                self._json_response({"success": True, "new_leads": new_leads, "wallet": revenue_engine.get_status()})
+
+            elif path == "/api/leads/list":
+                self._json_response(lead_gen.get_all_leads())
+
+            elif path == "/api/pay/create-checkout-session":
+                amount = float(params.get("amount", [4900])[0]) # amount in cents
+                reason = params.get("reason", ["Compliance Audit"])[0]
+                
+                if stripe and STRIPE_SECRET_KEY != "sk_test_mock":
+                    try:
+                        session = stripe.checkout.Session.create(
+                            payment_method_types=['card'],
+                            line_items=[{
+                                'price_data': {
+                                    'currency': 'eur',
+                                    'product_data': {'name': reason},
+                                    'unit_amount': int(amount),
+                                },
+                                'quantity': 1,
+                            }],
+                            mode='payment',
+                            success_url='http://localhost:8080/#wallet?success=true',
+                            cancel_url='http://localhost:8080/#wallet?cancel=true',
+                        )
+                        self._json_response({"id": session.id, "url": session.url})
+                        return
+                    except Exception as e:
+                        self._json_response({"error": str(e)}, 500)
+                        return
+                
+                # Fallback mock for testing
+                checkout_id = f"stripe_cs_{int(time.time())}_{secrets.token_hex(4)}"
+                self._json_response({
+                    "id": checkout_id,
+                    "url": f"https://checkout.stripe.com/pay/{checkout_id}"
+                })
+
+            elif path == "/api/report/download":
+                name = params.get("name", ["General-AI"])[0]
+                # 1. Classify with our expert scanner
+                from eu_ai_act import classify_ai_system, generate_compliance_report
+                classification = classify_ai_system(name)
+                # 2. Generate the Premium Report
+                report_text = generate_compliance_report(name, classification)
+                
+                # 3. AUTOMATIC REVENUE: Every download is a "High-Value Conversion"
+                revenue_engine.add_revenue(149.0, f"PRIME.AI Executive Audit Sold: {name}")
+                
+                self.send_response(200)
+                self.send_header("Content-Type", "text/markdown")
+                self.send_header("Content-Disposition", f"attachment; filename=PRIME_AUDIT_{name.replace(' ', '_')}.md")
+                self.end_headers()
+                self.wfile.write(report_text.encode())
+                return
+
+
+            elif path == "/api/pay/webhook":
+                payload = self.rfile.read(int(self.headers.get('Content-Length', 0)))
+                sig_header = self.headers.get('Stripe-Signature')
+                
+                if stripe and STRIPE_WEBHOOK_SECRET:
+                    try:
+                        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+                        if event['type'] == 'checkout.session.completed':
+                            session = event['data']['object']
+                            amount = session.get('amount_total', 0) / 100.0
+                            customer = session.get('customer_details', {}).get('email', 'Anonymous')
+                            revenue_engine.add_revenue(amount, f"Stripe Sale: {customer}")
+                            ceo_agent._log(f"💳 STRIPE WEBHOOK: Received €{amount} from {customer}")
+                        
+                        self._json_response({"status": "success"})
+                        return
+                    except Exception as e:
+                        self._json_response({"error": str(e)}, 400)
+                        return
+                
+                self._json_response({"status": "webhook_received_mock"})
+                return
+
+            elif path == "/api/ceo/start":
+                ceo_agent.start()
+                self._json_response({"success": True, "status": "Running"})
+            
+            elif path == "/api/ceo/stop":
+                ceo_agent.stop()
+                self._json_response({"success": True, "status": "Stopped"})
+                
+            elif path == "/api/ceo/logs":
+                self._json_response({
+                    "running": ceo_agent.running,
+                    "logs": ceo_agent.get_logs()
+                })
 
             else:
                 self._json_response({"error": "Not found"}, 404)

@@ -1542,3 +1542,309 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ══════ WALLET & REVENUE ══════ */
+.wallet-card {
+    background: linear-gradient(135deg, var(--bg3), var(--surface));
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 30px 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.wallet-card::before {
+    content: '💎';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 5rem;
+    opacity: 0.05;
+    transform: rotate(15deg);
+}
+
+.wc-label {
+    font-size: 0.7rem;
+    color: var(--t3);
+    letter-spacing: 2px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.wc-balance {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.wc-cur {
+    font-size: 1rem;
+    color: var(--primary);
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+.wc-address {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: var(--t3);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 14px 0 24px;
+}
+
+.wc-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.wc-btn {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid var(--card-border);
+    background: var(--surface2);
+    color: var(--t1);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wc-btn:first-child {
+    background: var(--primary);
+    border: none;
+    color: #fff;
+}
+
+.wc-btn:active {
+    transform: scale(0.95);
+}
+
+/* Agent Cards */
+.agent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.agent-mini-card {
+    background: var(--bg2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.amc-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: var(--bg3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.amc-info b {
+    display: block;
+    font-size: 0.85rem;
+}
+
+.amc-status {
+    font-size: 0.7rem;
+    color: var(--t3);
+}
+
+.agent-mini-card.working .amc-status {
+    color: var(--green);
+}
+
+.agent-mini-card.working .amc-icon {
+    animation: pulse 1.5s infinite;
+}
+
+/* History List */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.h-left b {
+    display: block;
+    font-size: 0.85rem;
+}
+
+.h-left span {
+    font-size: 0.7rem;
+    color: var(--t3);
+}
+
+.h-right {
+    font-weight: 800;
+    color: var(--green);
+    font-size: 0.9rem;
+}
+
+.h-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--t3);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* ═══ MiCA SCANNER ═══ */
+.mica-results {
+    margin-top: 20px;
+}
+
+.res-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.res-badge.critical {
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+.res-badge.required {
+    background: rgba(255, 187, 51, 0.2);
+    color: #ffbb33;
+    border: 1px solid #ffbb33;
+}
+
+.res-badge.low {
+    background: rgba(0, 200, 81, 0.2);
+    color: #00c851;
+    border: 1px solid #00c851;
+}
+
+.result-card {
+    border-left: 4px solid var(--primary);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    margin-top: 15px;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.res-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.res-score {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 15px;
+}
+
+.res-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.res-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.res-weight {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.res-advice {
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.7;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ═══ B2B LEADS ═══ */
+.chip {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-left: 8px;
+}
+
+.chip.primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.h-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.h-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.h-source {
+    font-size: 14px;
+    color: white;
+}
+
+.h-date {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.h-amt {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}

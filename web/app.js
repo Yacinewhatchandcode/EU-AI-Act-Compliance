@@ -127,52 +127,35 @@ function haptic() {
     if (navigator.vibrate) navigator.vibrate(12);
 }
 
-// ── Navigation with slide transitions ──
+// ── Navigation ──
 let currentScreen = 'home';
-const screenOrder = ['home', 'classify', 'scan', 'audit', 'report', 'roadmap', 'kb', 'agents'];
+const screenOrder = ['home', 'classify', 'scan', 'audit', 'report', 'roadmap', 'kb', 'agents', 'wallet', 'leads', 'mica'];
 
 function go(id) {
-    if (id === currentScreen) return;
+    if (id === currentScreen && location.hash === '#' + id) return;
     haptic();
 
-    const oldIdx = screenOrder.indexOf(currentScreen);
-    const newIdx = screenOrder.indexOf(id);
-    const goingRight = newIdx > oldIdx;
-
-    // Slide out old screen
-    const oldEl = document.getElementById(`screen-${currentScreen}`);
-    if (oldEl) {
-        oldEl.classList.remove('active');
-        if (goingRight) oldEl.classList.add('slide-left');
-        setTimeout(() => oldEl.classList.remove('slide-left'), 350);
-    }
-
-    // Slide in new screen
+    // Transition logic
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const newEl = document.getElementById(`screen-${id}`);
     if (newEl) {
-        newEl.style.transform = goingRight ? 'translateX(60px)' : 'translateX(-60px)';
-        newEl.style.opacity = '0';
-        requestAnimationFrame(() => {
-            newEl.classList.add('active');
-            newEl.style.transform = '';
-            newEl.style.opacity = '';
-        });
-    }
-
-    // Update bottom nav
-    document.querySelectorAll('.nav-item').forEach(n => {
-        n.classList.toggle('active', n.dataset.screen === id);
-    });
-
-    // Update hash
-    location.hash = id === 'home' ? '' : id;
-    currentScreen = id;
-
-    // Scroll to top
-    if (newEl) {
+        newEl.classList.add('active');
         const scroll = newEl.querySelector('.screen-scroll');
         if (scroll) scroll.scrollTop = 0;
     }
+
+    // Update state
+    currentScreen = id;
+    location.hash = id === 'home' ? '' : id;
+
+    // Update Navigation UI
+    document.querySelectorAll('.nav-item').forEach(n => {
+        n.classList.toggle('active', n.getAttribute('onclick')?.includes(`'${id}'`));
+    });
+
+    // Data lazy-loading
+    if (id === 'wallet') loadWallet();
+    if (id === 'leads') loadLeads();
 }
 
 // ── Countdown ──
@@ -622,5 +605,408 @@ function fillScanUrl(url) {
     haptic();
 }
 
-// ── Init ──
-loadKB();
+
+// ════════════════════════════════════════
+//  WALLET & REVENUE
+// ════════════════════════════════════════
+async function loadWallet() {
+    try {
+        const data = await api('/wallet');
+        updateWalletUI(data);
+    } catch (e) {
+        snack('❌ Failed to load wallet');
+    }
+}
+
+function updateWalletUI(w) {
+    const balEl = document.getElementById('walletBalance');
+    if (balEl) balEl.textContent = Number(w.balance).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+    const addrEl = document.getElementById('walletAddress');
+    if (addrEl) addrEl.textContent = w.address;
+
+    // Agents status
+    const oAgent = document.getElementById('agent-openclaw');
+    if (oAgent) {
+        oAgent.classList.toggle('working', w.agents.openclaw.status === 'working');
+        oAgent.querySelector('.amc-status').textContent = w.agents.openclaw.status.toUpperCase();
+    }
+    const pAgent = document.getElementById('agent-picoclaw');
+    if (pAgent) {
+        pAgent.classList.toggle('working', w.agents.picoclaw.status === 'working');
+        pAgent.querySelector('.amc-status').textContent = w.agents.picoclaw.status.toUpperCase();
+    }
+
+    // History
+    const histEl = document.getElementById('walletHistory');
+    if (histEl) {
+        if (!w.history || w.history.length === 0) {
+            histEl.innerHTML = '<div class="h-empty">No transactions yet</div>';
+        } else {
+            histEl.innerHTML = w.history.map(h => `
+                <div class="history-item">
+                    <div class="h-left">
+                        <b>${h.source}</b>
+                        <span>${h.date}</span>
+                    </div>
+                    <div class="h-right">+${h.amount}</div>
+                </div>
+            `).join('');
+        }
+    }
+}
+
+async function doGenerateRevenue() {
+    haptic();
+    const btn = document.getElementById('genBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Working...';
+    }
+
+    // UI feedback: set agents to working
+    document.getElementById('agent-openclaw')?.classList.add('working');
+    document.getElementById('agent-picoclaw')?.classList.add('working');
+
+    try {
+        const res = await api('/wallet/generate');
+        if (res.success) {
+            snack('💰 Revenue generated successfully!');
+            updateWalletUI(res.wallet);
+        }
+    } catch (e) {
+        snack('❌ Generation failed');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = '⚡ Generate';
+        }
+    }
+}
+
+// Update go function to load wallet
+function go(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+    document.getElementById(`screen-${screenId}`).style.display = 'block';
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    const navItem = document.querySelector(`.nav-item[onclick*="'${screenId}'"]`);
+    if (navItem) navItem.classList.add('active');
+
+    location.hash = screenId;
+    if (screenId === 'wallet') loadWallet();
+    if (screenId === 'leads') loadLeads();
+}
+
+// ── Initialization ──
+document.addEventListener('DOMContentLoaded', () => {
+    loadKB();
+    loadWallet();
+    loadLeads();
+    if (location.hash) go(location.hash.replace('#', ''));
+});
+
+async function unlockKnowledge() {
+    haptic();
+    const btn = document.querySelector('.pc-btn');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Unlocking...';
+    }
+
+    try {
+        const res = await api('/wallet/spend?amount=50&reason=Unlock%20Premium%20Intel');
+        if (res.success) {
+            snack('✨ Knowledge Unlocked!');
+            updateWalletUI(res.wallet);
+
+            // Show insights
+            const insightEl = document.getElementById('premiumInsights');
+            if (insightEl) {
+                insightEl.style.display = 'block';
+                insightEl.innerHTML = `
+                    <div class="card premium-content fade-in">
+                        <h3>💎 2026 AI Niches Unlocked</h3>
+                        <ul>
+                            <li><b>Real Estate AI Compliance</b>: High demand in Paris/Lyon. 💸</li>
+                            <li><b>Deepfake Detection for Hotels</b>: New safety laws coming June 2026.</li>
+                            <li><b>Automated HR Screening</b>: Art. 14 audit needed for startups.</li>
+                        </ul>
+                        <button class="wc-btn ripple" onclick="go('scan')">Scan Prospect Sites</button>
+                    </div>
+                `;
+                const pCard = document.querySelector('.premium-card');
+                if (pCard) pCard.style.display = 'none';
+            }
+        } else {
+            snack('❌ Not enough $PRIME. Earn more by scanning!');
+        }
+    } catch (e) {
+        snack('❌ System error during unlock');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Unlock (50 $PRIME)';
+        }
+    }
+}
+
+async function doMicaScan() {
+    const txt = document.getElementById('micaInput').value;
+    if (!txt) return snack('Paste some text first');
+
+    const btn = document.getElementById('micaBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = '🔍 Analyzing Compliance...';
+    }
+
+    try {
+        const res = await api(`/mica/scan?q=${encodeURIComponent(txt)}`);
+        const out = document.getElementById('micaResults');
+        if (out) {
+            out.innerHTML = `
+                <div class="card result-card fade-in">
+                    <div class="res-header">
+                        <span class="res-badge ${res.status.toLowerCase()}">${res.status}</span>
+                        <h3>${res.classification}</h3>
+                    </div>
+                    <div class="res-score">MiCA Impact Score: <b>${res.score}</b></div>
+                    <div class="res-list">
+                        ${res.indicators.map(i => `
+                            <div class="res-item">
+                                <span><b>${i.category}</b> (${i.article})</span>
+                                <span class="res-weight">+${i.weight}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="res-advice">💡 ${res.legal_advice}</div>
+                    <button class="btn primary ripple" onclick="snack('Report Saved to Wallet History')">📦 Generate PDF Report</button>
+                </div>
+            `;
+        }
+    } catch (e) {
+        snack('❌ Analysis failed');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Analyze for MiCA';
+        }
+    }
+}
+
+async function doDownloadReport() {
+    haptic();
+    const btn = document.getElementById('dlBtn');
+    if (btn) btn.disabled = true;
+
+    try {
+        const name = document.getElementById('mica-input')?.value || 'Compliance-Project';
+        // Trigger a real browser download
+        const url = `/api/report/download?name=${encodeURIComponent(name)}`;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `EU_AUDIT_${name}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        snack('📑 Downloading Premium Report...');
+    } catch (e) {
+        snack('❌ Download failed');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function doCheckout(amount, reason) {
+    haptic();
+    snack('💳 Connecting to Stripe Secure Checkout...');
+    try {
+        const res = await api('/pay/create-checkout-session', { amount, reason });
+        if (res.id) {
+            // In real prod: stripe.redirectToCheckout({ sessionId: res.id });
+            // For now: Show the "Real" stripe intent link
+            setTimeout(() => {
+                window.location.href = res.url;
+            }, 1000);
+        }
+    } catch (e) {
+        snack('❌ Payment system unavailable');
+    }
+}
+
+async function doConnectStripe() {
+    haptic();
+    snack('🔗 Opening Stripe OAuth Gateway...');
+    // The official Stripe MCP authorization URL
+    const stripeMcpUrl = 'https://mcp.stripe.com/authorize';
+    setTimeout(() => {
+        window.open(stripeMcpUrl, '_blank');
+        snack('ℹ️ Please complete authorization in the new tab.');
+    }, 1500);
+}
+async function doProspecting() {
+    haptic();
+    snack('🕷️ PicoClaw is scanning French niches...');
+    try {
+        const res = await api('/leads/prospect?niche=fintech_paris');
+        if (res.success) {
+            snack(`✅ Found ${res.new_leads.length} new prospects!`);
+            updateWalletUI(res.wallet);
+            loadLeads();
+            // Mock: after prospecting, if they clicked connect, update status
+            const ss = document.getElementById('stripe-status');
+            if (ss && ss.innerText === 'Not Connected') {
+                // We'll leave it for now until they actually connect
+            }
+        }
+    } catch (e) {
+        snack('❌ Prospecting failed');
+    }
+}
+
+async function loadLeads() {
+    try {
+        const leads = await api('/leads/list');
+        const containers = ['leadList', 'leadsDashboard'];
+        containers.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (leads.length === 0) {
+                el.innerHTML = '<div class="h-empty">No leads found yet</div>';
+                return;
+            }
+            el.innerHTML = leads.map(l => `
+                <div class="h-item">
+                    <div class="h-info">
+                        <div class="h-source"><b>${l.company}</b> <span class="chip">${l.niche}</span></div>
+                        <div class="h-date">${l.contact} • Trigger: ${l.trigger}</div>
+                    </div>
+                    <div class="h-amt" style="color:var(--primary)">+${l.value}€</div>
+                </div>
+            `).join('');
+        });
+    } catch (e) {
+        console.error('Failed to load leads', e);
+    }
+}
+// ── Web3 / Coinbase Wallet ──
+let userAddress = null;
+
+async function connectCoinbaseWallet() {
+    haptic();
+    const btn = document.getElementById('connectWalletBtn');
+
+    // Check if SDK loaded from CDN
+    if (!window.CoinbaseWalletSDK || !window.ethers) {
+        snack('❌ Web3 Libraries not ready');
+        return;
+    }
+
+    try {
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '🔄 Linking...';
+        }
+
+        const coinbaseWallet = new window.CoinbaseWalletSDK({
+            appName: 'PRIME-AI Compliance',
+            appLogoUrl: '',
+            darkMode: true
+        });
+
+        // Default to Base Network
+        const baseRpcUrl = 'https://mainnet.base.org';
+        const chainId = 8453;
+
+        const ethereum = coinbaseWallet.makeWeb3Provider(baseRpcUrl, chainId);
+
+        // Request accounts
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+
+        snack('✅ Wallet Linked to Base!');
+        updateWalletConnectionUI();
+
+    } catch (e) {
+        console.error('Connection failed', e);
+        snack('❌ Connection Refused');
+    } finally {
+        if (btn && !userAddress) {
+            btn.disabled = false;
+            btn.textContent = 'Connect Coinbase Wallet';
+        }
+    }
+}
+
+function updateWalletConnectionUI() {
+    if (!userAddress) return;
+
+    const header = document.getElementById('walletStatusHeader');
+    if (header) {
+        header.innerHTML = `
+            <div class="res-header">
+                <span class="res-badge low" style="background:rgba(0,120,255,0.2);color:#0078ff;border-color:#0078ff">BASE MAINNET</span>
+                <span class="chip" style="margin:0">${userAddress.slice(0, 6)}...${userAddress.slice(-4)}</span>
+            </div>
+        `;
+    }
+
+    const addrEl = document.getElementById('walletAddress');
+    if (addrEl) addrEl.textContent = userAddress;
+
+    // Hide connect button if it exists elsewhere
+    const btn = document.getElementById('connectWalletBtn');
+    if (btn) btn.style.display = 'none';
+}
+
+let ceoInterval = null;
+
+async function toggleCEO() {
+    haptic();
+    const btn = document.getElementById('ceoBtn');
+    const isRunning = btn.innerText.includes('Stop');
+
+    try {
+        const action = isRunning ? 'stop' : 'start';
+        const res = await api(`/ceo/${action}`);
+        if (res.success) {
+            btn.innerText = isRunning ? 'Start Auto-Mode' : 'Stop Auto-Mode';
+            btn.style.background = isRunning ? '' : '#ff4757';
+            document.getElementById('ceo-status').innerText = `System: ${isRunning ? 'Idle' : 'Running'}`;
+            snack(`🤖 CEO Agent ${isRunning ? 'Stopped' : 'Started'}`);
+
+            if (!isRunning) {
+                if (!ceoInterval) ceoInterval = setInterval(pollCEOLogs, 3000);
+            } else {
+                if (ceoInterval) {
+                    clearInterval(ceoInterval);
+                    ceoInterval = null;
+                }
+            }
+        }
+    } catch (e) {
+        snack('❌ Failed to toggle CEO Agent');
+    }
+}
+
+async function pollCEOLogs() {
+    try {
+        const res = await api('/ceo/logs');
+        const feed = document.getElementById('ceo-feed');
+        if (feed && res.logs) {
+            feed.innerHTML = res.logs.map(log => {
+                let color = '#ccc';
+                if (log.includes('💰')) color = '#2ed573';
+                if (log.includes('🕵️')) color = '#1e90ff';
+                if (log.includes('📋')) color = '#ffa502';
+                return `<div style="color:${color}; margin-bottom:0.25rem;">${log}</div>`;
+            }).join('');
+        }
+        // If we see a sale, refresh the wallet
+        if (res.logs && res.logs[0] && res.logs[0].includes('💰')) {
+            loadWallet();
+        }
+    } catch (e) {
+        console.error('CEO Log Poll Failed');
+    }
+}
