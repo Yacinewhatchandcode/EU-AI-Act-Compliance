@@ -1,0 +1,26 @@
+[
+  {
+    "title": "The Death of Single-Agent AI",
+    "content": "🧠 Single-agent AI is dead. Multi-agent systems are the future.\n\nI just shipped a system with 118 autonomous tools running 24/7 — from crypto trading to 3D asset generation to EU AI Act compliance auditing.\n\nThe secret? Not one super-agent, but a fleet of specialized agents connected via:\n\n• Model Context Protocol (MCP) — the standard for agent communication\n• A2A Protocol — Agent-to-Agent mesh for multi-machine orchestration  \n• Semantic routing — automatically picks the best LLM for each task\n\nThis isn't a demo. It's in production, managing real money, real compliance, real content.\n\nThe age of autonomous agent fleets has begun. 🚀\n\n#AI #MultiAgent #MCP #Automation #ArtificialIntelligence #AgentAI",
+    "type": "thought_leadership",
+    "scheduled": "2026-03-21 09:00"
+  },
+  {
+    "title": "Why MCP Will Replace REST APIs for AI",
+    "content": "🔗 Unpopular opinion: Model Context Protocol (MCP) will replace REST APIs as the default interface between AI systems.\n\nWhy?\n\nREST was designed for human-driven applications.\nMCP was designed for agent-to-agent communication.\n\nIn my production system, I have 118 tools callable via MCP. Every agent can discover, negotiate, and invoke every other agent's capabilities — without hard-coded endpoints.\n\nThe result: new agents join the fleet and instantly access 118 capabilities. Zero integration code.\n\nThis is what \"interoperability\" actually looks like.\n\nIf you're still building AI tooling as REST endpoints, you're building for 2023.\n\n#MCP #ModelContextProtocol #AI #Agents #Architecture",
+    "type": "technical",
+    "scheduled": "2026-03-23 09:00"
+  },
+  {
+    "title": "EU AI Act: What Most Companies Are Getting Wrong",
+    "content": "🇪🇺 The EU AI Act deadline is August 2026. Most companies aren't ready.\n\nI built an automated compliance engine that:\n✅ Classifies AI systems by risk level (Prohibited → High → Limited → Minimal)\n✅ Audits against all Article requirements\n✅ Calculates potential penalties (up to €35M or 7% of global turnover)\n✅ Generates compliance reports automatically\n✅ Scans websites for AI transparency issues\n\nThe engine runs as part of a 118-tool autonomous system.\n\nHere's what companies get wrong:\n❌ Thinking compliance is a checkbox\n❌ Waiting until 2026 to start\n❌ Not classifying their AI systems\n❌ Ignoring the MiCA crypto regulation\n\nStart now. The fines are real.\n\nDM me if you need a compliance audit.\n\n#EUAIAct #Compliance #AIRegulation #MiCA #GDPR",
+    "type": "business_development",
+    "scheduled": "2026-03-25 09:00"
+  },
+  {
+    "title": "My Agent Fleet Made €X While I Slept",
+    "content": "🤖 This morning I woke up to find my autonomous agent fleet had:\n\n• Collected Bitcoin satoshis from 4 sources\n• Scanned Upwork for matching AI contracts\n• Published 3 social media posts\n• Generated a compliance report for a client\n• Ran a DeFi arbitrage scan\n• Updated my portfolio tracking\n\nAll without me touching a keyboard.\n\nThis is what 118 autonomous tools can do when properly orchestrated.\n\nThe tech stack:\n🔧 Nexus Control Center (Python)\n🔗 MCP Protocol for agent communication\n🌐 A2A Protocol for multi-machine orchestration\n🧠 5 AI models with semantic routing\n\nSolo founders: stop doing everything manually.\nBuild agents that work while you sleep. 💤\n\n#Automation #AI #AgentFleet #PassiveIncome #SoloFounder",
+    "type": "personal_brand",
+    "scheduled": "2026-03-27 09:00"
+  }
+]

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIME.AI — Sovereign Nexus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #06060a;
+            --surface: #0d0d14;
+            --surface2: #13131d;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --accent: #00e87b;
+            --accent-dim: rgba(0, 232, 123, 0.15);
+            --accent-glow: rgba(0, 232, 123, 0.25);
+            --danger: #ff3b5c;
+            --warn: #ffb347;
+            --blue: #4d8dff;
+            --text: #f0f0f5;
+            --text2: #9090a8;
+            --text3: #5c5c72;
+            --radius: 14px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ═══ NAV ═══ */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 64px;
+            background: rgba(6, 6, 10, 0.85);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo svg {
+            opacity: 0.9;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 var(--accent-glow)
+            }
+
+            50% {
+                opacity: .6;
+                box-shadow: 0 0 0 8px transparent
+            }
+        }
+
+        .nav-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        /* ═══ METRICS BAR ═══ */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px 32px;
+        }
+
+        .metric {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            transition: border-color 0.2s;
+        }
+
+        .metric:hover {
+            border-color: var(--border-hover);
+        }
+
+        .metric-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text3);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-val {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .metric-val.green {
+            color: var(--accent);
+        }
+
+        /* ═══ MAIN GRID ═══ */
+        .main {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 0;
+            min-height: calc(100vh - 64px - 100px);
+        }
+
+        /* ═══ TOOL PANEL (Left) ═══ */
+        .tool-panel {
+            padding: 0 32px 32px 32px;
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+        }
+
+        .category {
+            margin-bottom: 28px;
+        }
+
+        .cat-header {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text3);
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cat-header span {
+            font-size: 16px;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .tool-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-family: inherit;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--accent);
+            background: rgba(0, 232, 123, 0.04);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-btn.running {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .tool-btn .btn-title {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool-btn .btn-desc {
+            font-size: 11px;
+            color: var(--text3);
+            line-height: 1.4;
+        }
+
+        .tool-btn .btn-status {
+            font-size: 10px;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            display: none;
+        }
+
+        .tool-btn.running .btn-status {
+            display: block;
+        }
+
+        /* ═══ ACTIVITY LOG (Right) ═══ */
+        .activity {
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-header {
+            padding: 20px 24px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text3);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .log-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .log-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .log-item.success {
+            border-left: 3px solid var(--accent);
+        }
+
+        .log-item.error {
+            border-left: 3px solid var(--danger);
+        }
+
+        .log-time {
+            font-size: 10px;
+            color: var(--text3);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .log-msg {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text2);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ═══ RESULT MODAL ═══ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface2);
+            border: 1px solid var(--border-hover);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-head h3 {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-body pre {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text2);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .modal-foot {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-close,
+        .btn-copy {
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-close {
+            background: transparent;
+            color: var(--text2);
+        }
+
+        .btn-close:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-copy {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .btn-copy:hover {
+            opacity: 0.9;
+        }
+
+        /* ═══ SCROLLBAR ═══ */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-hover);
+            border-radius: 10px;
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 900px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .activity {
+                border-left: none;
+                border-top: 1px solid var(--border);
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 22H22L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round" />
+            </svg>
+            PRIME.AI
+        </div>
+        <div class="nav-badge">
+            <div class="live-dot"></div> Nexus Online — <span id="tool-count">0</span> Tools
+        </div>
+    </nav>
+
+    <div class="metrics">
+        <div class="metric">
+            <div class="metric-label">Stripe Balance</div>
+            <div class="metric-val green" id="val-rev">€—</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Coinbase Portfolio</div>
+            <div class="metric-val" id="val-portfolio">—</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Operations Today</div>
+            <div class="metric-val" id="val-tasks">0</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">CPU Load</div>
+            <div class="metric-val" id="val-cpu">—</div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="tool-panel" id="toolPanel">
+            <!-- Categories will be built by JS -->
+        </div>
+        <div class="activity">
+            <div class="activity-header">
+                <span>Activity Log</span>
+                <span id="log-count" style="color:var(--accent)">0 events</span>
+            </div>
+            <div class="log-list" id="logList">
+                <div class="log-item">
+                    <div class="log-time">System</div>
+                    <div class="log-msg">Nexus initialized. Waiting for your commands.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 id="modal-title">Result</h3>
+                <span id="modal-status" style="font-size:12px; color:var(--text3)"></span>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div id="modal-rich"></div>
+                <pre id="modal-content" style="display:none"></pre>
+            </div>
+            <div class="modal-foot">
+                <button class="btn-close" onclick="closeModal()">Close</button>
+                <button class="btn-copy" onclick="copyResult()">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════
+        // CEO-FRIENDLY ACTION MAP
+        // key → { label, desc, icon }
+        // key MUST match nexus_server.py ACTION_MAP exactly
+        // ═══════════════════════════════════════════════════
+
+        const TOOLS = {
+            '💰 Trading': {
+                balance: { label: 'View My Balances', desc: 'See all crypto balances across Coinbase' },
+                prices: { label: 'Live Crypto Prices', desc: 'Fetch real-time BTC, ETH, SOL prices' },
+                fear: { label: 'Market Mood Index', desc: 'Check if the market is fearful or greedy' },
+                buy: { label: 'Buy Crypto', desc: 'Place a market buy order on Coinbase' },
+                sell: { label: 'Sell Crypto', desc: 'Place a market sell order on Coinbase' },
+                cycle: { label: 'Auto-Trade Cycle', desc: 'Run one buy/sell cycle using AI strategy' },
+                portfolio: { label: 'Portfolio Summary', desc: 'Full P&L breakdown of all positions' },
+                defi: { label: 'DeFi Agent', desc: 'Run the DeFi trading strategy agent' },
+                arbitrage: { label: 'Find Arbitrage', desc: 'Scan for price gaps between exchanges' },
+                power_cycle: { label: 'Power Cycle', desc: 'Aggressive multi-asset rotation cycle' },
+            },
+
+            '⚡ Crypto Earnings': {
+                batch_sats: { label: 'Collect Satoshis', desc: 'Batch-claim Lightning sats from all sources' },
+                satoshi: { label: 'Auto-Invest in BTC', desc: 'Convert a portion of revenue into Bitcoin' },
+                airdrop: { label: 'Scan Airdrops', desc: 'Find free crypto giveaways to claim' },
+                money: { label: 'Money Machine', desc: 'Run the full passive income pipeline' },
+                real_earn: { label: 'All Earnings Tracker', desc: 'Track real earnings across every channel' },
+                crypto_scan: { label: 'Learn & Earn Quiz', desc: 'Find paid crypto quizzes (Coinbase, Revolut)' },
+                flush: { label: 'Flush to Wallet', desc: 'Sweep all earned crypto to cold wallet' },
+                cashout: { label: 'Transfer to Revolut', desc: 'Move available Stripe funds to your bank' },
+            },
+
+            '🛡️ Compliance & Legal': {
+                classify: { label: 'Classify AI Risk Level', desc: 'Check if your product is High/Low risk under EU AI Act' },
+                audit: { label: 'Full Compliance Audit', desc: 'Run a complete EU AI Act compliance check' },
+                mica: { label: 'Crypto Regulation Check', desc: 'Scan crypto project for MiCA compliance' },
+                deadlines: { label: 'Upcoming Deadlines', desc: 'See regulatory deadlines you must meet' },
+                penalties: { label: 'Penalty Calculator', desc: 'Estimate fines for non-compliance' },
+                report: { label: 'Generate Report', desc: 'Create a PDF compliance report' },
+                cyber: { label: 'Cybersecurity Scan', desc: 'Audit your infrastructure for vulnerabilities' },
+                scan_url: { label: 'Scan a Website', desc: 'Check any URL for AI Act / GDPR issues' },
+            },
+
+            '📱 Communications': {
+                wa_msg: { label: 'Send WhatsApp', desc: 'Send a message via WhatsApp bridge' },
+                wa_file: { label: 'Send WhatsApp File', desc: 'Send a file or image via WhatsApp' },
+                wa_ws: { label: 'WhatsApp WebSocket', desc: 'Connect to WhatsApp via WebSocket bridge' },
+                telegram: { label: 'Send Telegram', desc: 'Post a message to your Telegram channel' },
+                discord: { label: 'Send Discord', desc: 'Post to your Discord server' },
+                slack: { label: 'Send Slack', desc: 'Post to your Slack workspace' },
+                email: { label: 'Email Campaign', desc: 'Draft and queue a cold email sequence' },
+                instagram: { label: 'Post to Instagram', desc: 'Create and schedule an Instagram post' },
+                news: { label: 'Fetch Latest News', desc: 'Scrape AI & crypto news from top sources' },
+                qr: { label: 'Generate QR Code', desc: 'Create a QR code for any URL or wallet' },
+            },
+
+            '🖥️ Desktop Control': {
+                screenshot: { label: 'Take Screenshot', desc: 'Capture the current screen' },
+                click: { label: 'Click Coordinates', desc: 'Click at specific screen position' },
+                type: { label: 'Type Text', desc: 'Type text using keyboard automation' },
+                hotkey: { label: 'Press Hotkey', desc: 'Trigger a keyboard shortcut (e.g. Ctrl+C)' },
+                open_app: { label: 'Open Application', desc: 'Launch any program on the desktop' },
+                find_win: { label: 'Find Window', desc: 'Locate and focus a window by title' },
+                perplexity: { label: 'Search Perplexity', desc: 'Deep search via Perplexity AI' },
+                chatgpt: { label: 'Ask ChatGPT', desc: 'Send a question to ChatGPT' },
+            },
+
+            '📊 Business Intelligence': {
+                openclaw_intent: { label: 'OpenClaw Intent Engine', desc: 'Listen for pre-conversational signals' },
+                prospects: { label: 'Find New Leads', desc: 'Scrape business databases for prospects' },
+                enrich: { label: 'Enrich Lead Data', desc: 'Add emails, phones & company info to leads' },
+                invoice: { label: 'Create Invoice', desc: 'Generate a professional Stripe invoice' },
+                revenue: { label: 'Revenue Report', desc: 'Full income breakdown from all sources' },
+                document: { label: 'Create Document', desc: 'Generate a PDF/Word/HTML report' },
+                ceo: { label: 'Launch CEO Agent', desc: 'Start the autonomous operations manager' },
+                analytics: { label: 'Site Analytics', desc: 'View traffic & engagement metrics' },
+                live_tracking: { label: 'Live Tracking', desc: 'Real-time pipeline status dashboard' },
+                stripe: { label: 'Stripe Dashboard', desc: 'Check real payments & payout status' },
+                mcp_bridge: { label: 'MCP Bridge', desc: 'Manage the MCP communication bridge' },
+                deploy: { label: 'Deploy to Production', desc: 'Ship latest code to Vercel edge network' },
+            },
+
+            '🎮 Competitions': {
+                botgames: { label: 'BotGames Status', desc: 'Check competition watchdog log' },
+                fight: { label: 'BotGames Fight', desc: 'Run the fighting bot agent' },
+                metaculus: { label: 'Metaculus Predict', desc: 'Submit AI predictions to Metaculus' },
+                lablab: { label: 'LabLab Submit', desc: 'Submit to LabLab AI competition' },
+                arena: { label: 'Arena Game', desc: 'Run the arena game bot agent' },
+                multi_comp: { label: 'Multi-Competition', desc: 'Submit to multiple competitions at once' },
+            },
+
+            '🎨 Creative Studio': {
+                gen3d: { label: 'Generate 3D Asset', desc: 'Create a 3D model using AI generation' },
+                sketchfab: { label: 'Upload to Sketchfab', desc: 'Publish 3D asset to the marketplace' },
+                characters: { label: 'Generate Characters', desc: 'Create AI character models' },
+                worlds: { label: 'Build World Model', desc: 'Generate virtual environment data' },
+                video: { label: 'Compile Promo Video', desc: 'Assemble assets into a promotional video' },
+                fast_promo: { label: 'Quick Promo Generator', desc: 'Create a 30-second marketing video' },
+                record: { label: 'Record Demo', desc: 'Screen-record a product demo' },
+                transcribe: { label: 'Transcribe Audio', desc: 'Convert audio/video to text' },
+            },
+
+            '🔧 System Management': {
+                start_all: { label: 'Start All Bots', desc: 'Boot every automation bot at once' },
+                agents: { label: 'Agent Fleet Health', desc: 'Check status of all MCP agent servers' },
+                device: { label: 'Scan This Computer', desc: 'Inventory all hardware & running processes' },
+                gdrive: { label: 'Scan Google Drive', desc: 'Audit Google Drive files and storage' },
+                repos: { label: 'Audit GitHub Repos', desc: 'Scan all repositories for issues' },
+                fix_repos: { label: 'Auto-Fix Repo Issues', desc: 'Apply automated fixes to flagged repos' },
+                push: { label: 'Push All Code', desc: 'Git push all local changes to GitHub' },
+                gh_meta: { label: 'Update GitHub Meta', desc: 'Refresh repo descriptions and topics' },
+                icons: { label: 'Generate Icons', desc: 'Auto-generate app icons and favicons' },
+                tunnel: { label: 'Create Public URL', desc: 'Expose this dashboard to the internet' },
+                supabase: { label: 'Sync Supabase', desc: 'Synchronize database with Supabase cloud' },
+                deep_scan: { label: 'Deep System Scan', desc: 'Full recursive audit of every file & script' },
+            },
+
+            '🤖 Autonomous Agents': {
+                fleet: { label: 'Run Full Agent Fleet', desc: 'Execute all autonomous agents in parallel' },
+                ceo_ops: { label: 'CEO Auto-Operations', desc: 'Run a full autonomous business cycle' },
+                startup_seq: { label: 'Boot Sequence', desc: 'Initialize all services from scratch' },
+                bot_engine: { label: 'Bot Engine', desc: 'Start the persistent background bot loop' },
+                gh_promos: { label: 'GitHub Promo Videos', desc: 'Auto-generate promotional videos for repos' },
+                master_vid: { label: 'Master Video', desc: 'Compile the ultimate product demo video' },
+            },
+
+            '🐦 Social Media': {
+                twitter: { label: 'Post on X (Twitter)', desc: 'Compose and publish a tweet' },
+                twitter_thread: { label: 'Twitter Thread', desc: 'Post a multi-tweet thread on X' },
+                linkedin: { label: 'Post on LinkedIn', desc: 'Publish a professional LinkedIn update' },
+            },
+
+            '📅 Calendar': {
+                cal_event: { label: 'Create Event', desc: 'Add a new event to your calendar' },
+                ceo_day: { label: 'Schedule CEO Day', desc: 'Auto-populate a full CEO daily routine' },
+                cal_today: { label: "Today's Events", desc: 'See all events scheduled for today' },
+            },
+
+            '🎙️ Voice': {
+                voice_speak: { label: 'Text to Speech', desc: 'Generate speech from text input' },
+                voice_list: { label: 'List Voices', desc: 'Show all available voice models' },
+            },
+
+            '🧠 AI Tools': {
+                ai_ask: { label: 'Ask AI a Question', desc: 'Route a query to the best available model' },
+                ai_models: { label: 'Available AI Models', desc: 'List all configured AI models & their status' },
+            },
+
+            '📊 Analysis': {
+                analyze_data: { label: 'Analyze Data', desc: 'Run AI analysis on local datasets' },
+                analyze_pdf: { label: 'Analyze a PDF', desc: 'Extract insights from a PDF document' },
+                analyze_csv: { label: 'Analyze a Spreadsheet', desc: 'Process and summarize CSV data' },
+            },
+
+            '📅 Marketing': {
+                mktg_post: { label: 'Schedule Post', desc: 'Schedule a social media post' },
+                mktg_week: { label: 'Plan Weekly Content', desc: 'Auto-generate a week of content' },
+                mktg_publish: { label: 'Publish Due Content', desc: 'Post all content that is due now' },
+            },
+
+            '⚡ Task Queue': {
+                queue_status: { label: 'Queue Status', desc: 'Check what jobs are pending or running' },
+                queue_loop: { label: 'Never-Stop Loop', desc: 'Run all tasks in an infinite cycle' },
+            },
+
+            '⛏️ Mining': {
+                mine_setup: { label: 'Setup Mining Rig', desc: 'Configure XMRig for background CPU mining' },
+                mine_launch: { label: 'Start Mining', desc: 'Begin passive crypto mining right now' },
+                mine_upgrade: { label: 'Upgrade Miner', desc: 'Update mining software & optimize settings' },
+            },
+
+            '🎯 Freelance Sniper': {
+                sniper_freelance_fleet: { label: 'Auto-Apply to Jobs', desc: 'Let AI find and bid on freelance gigs' },
+                sniper_upwork_bot: { label: 'Upwork Job Hunter', desc: 'Scan Upwork and auto-draft proposals' },
+                sniper_github_work: { label: 'GitHub Paid Issues', desc: 'Find open-source issues with cash bounties' },
+                sniper_bounty_hunter: { label: 'Execute Bounty Hunt', desc: 'Write code & submit PRs for bounty rewards' },
+            },
+
+            '💼 Sales Machine': {
+                sales_ultimate_machine: { label: 'Ultimate Sales Machine', desc: 'Run the full automated sales pipeline' },
+                sales_lead_sniper: { label: 'Lead Sniper Bot', desc: 'Detect high-intent LinkedIn signals' },
+                sales_prospect_finder: { label: 'Find Prospects', desc: 'Search French government business data' },
+                sales_email_blaster: { label: 'Email Blaster', desc: 'Mass-send personalized cold emails' },
+                malt_sniper: { label: '🇫🇷 Malt.fr Sniper', desc: 'Scrape competitors, optimize profile, dominate rankings' },
+                visibility_engine: { label: '🚀 AI Visibility Engine', desc: 'Generate optimized content for GitHub, LinkedIn, Twitter & SEO' },
+            },
+        };
+
+        // ═══ BUILD UI ═══
+        let logCount = 0;
+        const panel = document.getElementById('toolPanel');
+        let totalTools = 0;
+
+        for (const [catName, tools] of Object.entries(TOOLS)) {
+            const section = document.createElement('div');
+            section.className = 'category';
+
+            const header = document.createElement('div');
+            header.className = 'cat-header';
+            header.innerHTML = `<span>${catName.split(' ')[0]}</span> ${catName.slice(catName.indexOf(' ') + 1)}`;
+            section.appendChild(header);
+
+            const grid = document.createElement('div');
+            grid.className = 'tool-grid';
+
+            for (const [key, info] of Object.entries(tools)) {
+                totalTools++;
+                const btn = document.createElement('button');
+                btn.className = 'tool-btn';
+                btn.setAttribute('data-action', key);
+                btn.innerHTML = `
+                <div class="btn-title">${info.label}</div>
+                <div class="btn-desc">${info.desc}</div>
+                <div class="btn-status">⏳ Running...</div>
+            `;
+                btn.onclick = () => runAction(key, info.label, btn);
+                grid.appendChild(btn);
+            }
+
+            section.appendChild(grid);
+            panel.appendChild(section);
+        }
+        document.getElementById('tool-count').textContent = totalTools;
+
+        // ═══ EXECUTE ACTION ═══
+        let lastResult = '';
+
+        async function runAction(key, label, btnEl) {
+            btnEl.classList.add('running');
+            addLog(`Running: ${label}...`, '');
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 90000);
+
+            try {
+                const res = await fetch('/api/nexus/' + key, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: '{}',
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                const data = await res.json();
+                lastResult = JSON.stringify(data, null, 2);
+
+                const hasError = data.error && !data.output && !data._steps;
+                showModal(label, data, hasError ? 'error' : 'success');
+                addLog(`${hasError ? '❌' : '✅'} ${label} — ${hasError ? (data.error || "").substring(0, 80) : 'Completed'}`, hasError ? 'error' : 'success');
+            } catch (e) {
+                clearTimeout(timeout);
+                lastResult = e.message;
+                showModal(label, { error: e.name === 'AbortError' ? 'Request timed out (90s)' : e.message }, 'error');
+                addLog(`❌ ${label} — ${e.name === 'AbortError' ? 'Timeout' : 'Network error'}`, 'error');
+            }
+
+            btnEl.classList.remove('running');
+        }
+
+        // ═══ RICH VISUAL RENDERER ═══
+        function renderRich(data) {
+            if (!data || typeof data !== 'object') return `<pre>${String(data)}</pre>`;
+
+            // If server provides explicit steps/visual
+            if (data._steps) {
+                let html = '<div style="display:flex;flex-direction:column;gap:10px">';
+                for (const step of data._steps) {
+                    const icon = step.status === 'done' ? '✅' : step.status === 'error' ? '❌' : step.status === 'skip' ? '⏭️' : '🔄';
+                    const color = step.status === 'done' ? '#00ff88' : step.status === 'error' ? '#ff4444' : '#888';
+                    html += `<div style="padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:8px;border-left:3px solid ${color}">`;
+                    html += `<div style="font-weight:600;margin-bottom:4px">${icon} ${esc(step.label)}</div>`;
+                    if (step.detail) html += `<div style="font-size:13px;color:#aaa">${esc(step.detail)}</div>`;
+                    html += '</div>';
+                }
+                if (data._summary) html += `<div style="margin-top:8px;padding:12px;background:rgba(0,255,136,0.08);border-radius:8px;font-weight:600">${esc(data._summary)}</div>`;
+                html += '</div>';
+                return html;
+            }
+
+            // Error display
+            if (data.error) {
+                let html = `<div style="padding:14px;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.2);border-radius:8px">`;
+                html += `<div style="font-weight:600;color:#ff6666;margin-bottom:6px">⚠️ Error</div>`;
+                html += `<div style="font-size:13px;color:#ccc">${esc(String(data.error))}</div>`;
+                if (data.fix) html += `<div style="margin-top:8px;padding:8px;background:rgba(0,255,136,0.05);border-radius:6px;font-size:12px">💡 ${esc(data.fix)}</div>`;
+                html += '</div>';
+                return html;
+            }
+
+            // Table for flat key-value objects
+            const keys = Object.keys(data).filter(k => !k.startsWith('_'));
+            if (keys.length > 0 && keys.every(k => typeof data[k] !== 'object')) {
+                let html = '<table style="width:100%;border-collapse:collapse">';
+                for (const k of keys) {
+                    const val = data[k];
+                    const displayVal = typeof val === 'number' ? (val % 1 !== 0 ? val.toFixed(6) : val) : val;
+                    html += `<tr style="border-bottom:1px solid rgba(255,255,255,0.06)">`;
+                    html += `<td style="padding:8px 12px;font-size:13px;color:#999;text-transform:uppercase;letter-spacing:0.5px;width:40%">${esc(k.replace(/_/g, ' '))}</td>`;
+                    html += `<td style="padding:8px 12px;font-weight:500;font-size:14px">${esc(String(displayVal))}</td>`;
+                    html += '</tr>';
+                }
+                html += '</table>';
+                return html;
+            }
+
+            // Nested objects — render sections
+            let html = '';
+            for (const k of keys) {
+                html += `<div style="margin-bottom:12px">`;
+                html += `<div style="font-size:11px;text-transform:uppercase;color:var(--accent);letter-spacing:1px;margin-bottom:6px">${esc(k.replace(/_/g, ' '))}</div>`;
+                if (typeof data[k] === 'object' && data[k] !== null) {
+                    html += `<pre style="font-size:12px;color:#bbb;margin:0">${esc(JSON.stringify(data[k], null, 2))}</pre>`;
+                } else {
+                    html += `<div style="font-size:14px">${esc(String(data[k]))}</div>`;
+                }
+                html += '</div>';
+            }
+            return html || `<pre>${esc(JSON.stringify(data, null, 2))}</pre>`;
+        }
+
+        function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+        // ═══ MODAL ═══
+        function showModal(title, data, status) {
+            document.getElementById('modal-title').innerHTML =
+                (status === 'error' ? '❌ ' : '✅ ') + title;
+            document.getElementById('modal-status').textContent =
+                status === 'error' ? 'Error' : 'Success';
+            document.getElementById('modal-rich').innerHTML = renderRich(data);
+            document.getElementById('modal-content').style.display = 'none';
+            document.getElementById('modal').classList.add('open');
+        }
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
+        function copyResult() { navigator.clipboard.writeText(lastResult); }
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal')) closeModal();
+        });
+
+        // ═══ LOG ═══
+        function addLog(msg, type) {
+            logCount++;
+            const list = document.getElementById('logList');
+            const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            const el = document.createElement('div');
+            el.className = `log-item ${type || ''}`;
+            el.innerHTML = `<div class="log-time">${now}</div><div class="log-msg">${msg}</div>`;
+            list.prepend(el);
+            if (list.children.length > 50) list.lastChild.remove();
+            document.getElementById('log-count').textContent = logCount + ' events';
+        }
+
+        // ═══ LIVE METRICS ═══
+        async function pollMetrics() {
+            try {
+                const res = await fetch('/api/nexus/live_metrics');
+                if (res.ok) {
+                    const m = await res.json();
+                    document.getElementById('val-tasks').textContent = m.tasks_completed || 0;
+                    document.getElementById('val-rev').textContent = '€' + (m.revenue || '0.00');
+                    document.getElementById('val-cpu').textContent = (m.cpu || 0) + '%';
+                }
+            } catch (e) { }
+            setTimeout(pollMetrics, 15000);
+        }
+        setTimeout(pollMetrics, 2000);
+
+        // Keyboard shortcut: Escape closes modal
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+
+</html>

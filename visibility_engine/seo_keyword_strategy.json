@@ -1,0 +1,81 @@
+{
+  "primary_targets": [
+    {
+      "keyword": "expert MCP model context protocol",
+      "difficulty": "Low",
+      "search_intent": "Hiring/Learning",
+      "strategy": "Be the #1 result — almost zero content exists"
+    },
+    {
+      "keyword": "architecte IA multi-agent freelance",
+      "difficulty": "Low",
+      "search_intent": "Hiring",
+      "strategy": "Target Malt/LinkedIn profile optimization"
+    },
+    {
+      "keyword": "EU AI Act compliance automation",
+      "difficulty": "Medium",
+      "search_intent": "B2B Purchase",
+      "strategy": "Landing page + blog content"
+    },
+    {
+      "keyword": "agent to agent protocol AI",
+      "difficulty": "Low",
+      "search_intent": "Learning",
+      "strategy": "Technical blog posts + GitHub README"
+    },
+    {
+      "keyword": "autonomous AI agent fleet",
+      "difficulty": "Medium",
+      "search_intent": "Learning/Buying",
+      "strategy": "Case study content"
+    }
+  ],
+  "long_tail_fr": [
+    "expert intelligence artificielle Paris freelance",
+    "développeur agents autonomes IA France",
+    "conformité EU AI Act consultant",
+    "automatisation IA multi-agent système",
+    "architecte MCP protocol freelance",
+    "expert LLM RAG LangChain freelance"
+  ],
+  "long_tail_en": [
+    "MCP model context protocol expert",
+    "A2A agent to agent protocol implementation",
+    "autonomous AI agent fleet architecture",
+    "multi-agent AI system production deployment",
+    "EU AI Act compliance SaaS"
+  ],
+  "content_plan": [
+    {
+      "topic": "What is Model Context Protocol (MCP)?",
+      "format": "blog + LinkedIn",
+      "target_kw": "MCP model context protocol",
+      "urgency": "High — first mover advantage"
+    },
+    {
+      "topic": "Building an A2A Agent Mesh",
+      "format": "GitHub README + tutorial",
+      "target_kw": "agent to agent protocol",
+      "urgency": "High — zero competition"
+    },
+    {
+      "topic": "EU AI Act Compliance Checklist 2026",
+      "format": "blog + PDF lead magnet",
+      "target_kw": "EU AI Act compliance",
+      "urgency": "Medium — deadline approaching"
+    },
+    {
+      "topic": "How to Build a 100+ Tool AI System",
+      "format": "Twitter thread + blog",
+      "target_kw": "autonomous AI agent fleet",
+      "urgency": "Medium"
+    },
+    {
+      "topic": "Multi-Agent vs Single-Agent AI",
+      "format": "LinkedIn article",
+      "target_kw": "multi-agent AI system",
+      "urgency": "Medium"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "title": "How I Built a 118-Tool Autonomous System",
+    "tweets": [
+      "🧵 Thread: How I built a 118-tool autonomous AI system that runs 24/7\n\nNo team. One developer. Production deployment.\n\nHere's the architecture 👇",
+      "1/ The core is the NEXUS CONTROL CENTER — a web dashboard that controls everything:\n\n• 20 categories of tools\n• Each tool has a real Python handler\n• All connected via MCP (Model Context Protocol)\n• Accessible from any device on the network",
+      "2/ The agent fleet includes:\n\n💰 Crypto trading (10 tools)\n⚡ Passive income (8 tools)\n🛡️ EU AI Act compliance (8 tools)\n📱 Multi-platform comms (10 tools)\n🖥️ Desktop automation (8 tools)\n📊 Business intelligence (12 tools)\n🎮 Competition bots (6 tools)\n...and 56 more",
+      "3/ The secret sauce: MCP + A2A\n\nMCP (Model Context Protocol) = how agents talk to tools\nA2A (Agent-to-Agent) = how agents talk to each other\n\nResult: plug in a new agent → it instantly has access to 118 capabilities",
+      "4/ Real results:\n\n✅ Trading bot managing real Coinbase portfolio\n✅ Compliance engine scanning for EU AI Act violations\n✅ Content pipeline publishing to 5 platforms\n✅ Freelance sniper auto-applying to Upwork\n✅ 3D assets generated and published to Sketchfab",
+      "5/ The tech stack:\n\nPython · TypeScript · Next.js\nOpenAI · Gemini · Claude · Mistral · DeepSeek\nStripe · Coinbase · Supabase · Vercel\nPlaywright · FFmpeg · Whisper\n\nAll open protocols. No vendor lock-in.",
+      "6/ What's next:\n\n• Malt.fr profile optimization (AI agent for freelance ranking)\n• Multi-machine A2A mesh expansion\n• Real-time video processing\n• Voice-controlled agent dispatch\n\nFollow for updates on building autonomous AI systems 🚀"
+    ],
+    "scheduled": "2026-03-22 12:00"
+  }
+]

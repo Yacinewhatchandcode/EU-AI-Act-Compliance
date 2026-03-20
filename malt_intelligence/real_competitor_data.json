@@ -1,0 +1,92 @@
+{
+  "real_competitors": [
+    {
+      "name": "Amina",
+      "title": "Expert IA | Automatisation IA - agent IA - N8n",
+      "tjm": 500,
+      "location": "Paris",
+      "rating": 5.0,
+      "reviews": 1,
+      "skills": ["Agent IA", "n8n", "ChatGPT", "Make", "Workflow"]
+    },
+    {
+      "name": "Mo",
+      "title": "Agent IA | RAG | Automatisation | LangChain",
+      "tjm": 850,
+      "location": "Paris",
+      "rating": 5.0,
+      "reviews": 1,
+      "skills": ["IA générative", "RAG", "LangGraph", "LLM", "Data Science"]
+    },
+    {
+      "name": "Loïc",
+      "title": "Consultant Automatisation & Agent IA",
+      "tjm": 500,
+      "location": "Paris",
+      "rating": 5.0,
+      "reviews": 3,
+      "skills": ["Agent IA", "Automatisation de processus métier", "n8n"]
+    },
+    {
+      "name": "Vincent Wargnier",
+      "title": "CTO | Agent IA & Full-Stack Web",
+      "rating": 5.0,
+      "reviews": 4,
+      "skills": ["LLM orchestration", "LangGraph", "RAG", "Prompt Engineering"]
+    },
+    {
+      "name": "Cléophas F.",
+      "title": "AI/ML Engineer · RAG & Multi-Agent Architect",
+      "skills": ["Secure RAG architectures", "Advanced AI agents"]
+    },
+    {
+      "name": "Thibaut Audeguy",
+      "title": "IA générative • LLM • RAG • Agents IA",
+      "tjm": 500,
+      "rating": 4.9,
+      "reviews": 7,
+      "skills": ["LLM", "RAG", "Agent IA"]
+    },
+    {
+      "name": "Benjamin Benoit",
+      "title": "AI Solutions Architect",
+      "skills": ["Enterprise AI solutions"]
+    },
+    {
+      "name": "Frédéric Barthelet",
+      "title": "Model Context Protocol (MCP)",
+      "tjm": 700,
+      "skills": ["MCP Contributor", "MCP servers"],
+      "note": "MCP Contributor - key competitor"
+    },
+    {
+      "name": "Luc Ebert",
+      "title": "Ingénieur IA | LangGraph | MCP | LLM",
+      "skills": ["MCP protocol", "LangGraph", "LLM"]
+    },
+    {
+      "name": "Lucas Blanchard",
+      "title": "Claude API & MCP",
+      "tjm": 350,
+      "skills": ["MCP", "Claude API"],
+      "note": "Author of MCP Advanced Topics"
+    }
+  ],
+  "market_insights": {
+    "tjm_range": "350€ - 850€",
+    "average_tjm": 557,
+    "mcp_specific_tjm": "350€ - 700€",
+    "top_keywords": ["Agent IA", "RAG", "LangGraph", "LLM", "MCP", "n8n", "Automatisation", "ChatGPT", "Data Science", "Prompt Engineering"],
+    "mcp_competitors_count": 3,
+    "ai_agent_competitors_count": 7,
+    "gaps": [
+      "A2A Protocol (ZERO competitors)",
+      "117-tool autonomous system (ZERO competitors)",
+      "EU AI Act compliance engine (ZERO competitors)",
+      "Crypto/DeFi automation (ZERO competitors)",
+      "3D AI Pipeline (ZERO competitors)",
+      "Multi-model router (ZERO competitors)",
+      "Desktop automation (ZERO competitors)"
+    ]
+  }
+}

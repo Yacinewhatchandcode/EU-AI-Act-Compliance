@@ -1,0 +1,61 @@
+{
+  "EU-AI-Act-Compliance": {
+    "description": "🛡️ Automated EU AI Act & MiCA compliance engine — risk classification, auditing, report generation",
+    "topics": [
+      "eu-ai-act",
+      "compliance",
+      "ai-regulation",
+      "mica",
+      "gdpr",
+      "risk-assessment",
+      "python",
+      "automation"
+    ]
+  },
+  "nexus-control-center": {
+    "description": "🖥️ 118-tool autonomous AI command center with multi-agent orchestration",
+    "topics": [
+      "ai-agents",
+      "automation",
+      "multi-agent",
+      "mcp",
+      "nexus",
+      "control-center",
+      "python",
+      "autonomous"
+    ]
+  },
+  "mcp-mega-server": {
+    "description": "🔗 Production Model Context Protocol (MCP) server — unified tool orchestration for AI agents",
+    "topics": [
+      "mcp",
+      "model-context-protocol",
+      "ai-agents",
+      "tool-orchestration",
+      "python",
+      "server"
+    ]
+  },
+  "a2a-protocol": {
+    "description": "🌐 Agent-to-Agent mesh protocol for distributed multi-machine AI orchestration",
+    "topics": [
+      "a2a",
+      "agent-to-agent",
+      "mesh-protocol",
+      "distributed-ai",
+      "multi-agent",
+      "orchestration"
+    ]
+  },
+  "openclaw": {
+    "description": "🦞 OpenClaw — autonomous AI orchestration framework for freelance, sales, and competitive intelligence",
+    "topics": [
+      "openclaw",
+      "ai-orchestration",
+      "automation",
+      "freelance",
+      "sales-automation",
+      "competitive-intelligence"
+    ]
+  }
+}

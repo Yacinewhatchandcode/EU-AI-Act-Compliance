@@ -1,0 +1,178 @@
+{
+  "total_profiles_analyzed": 10,
+  "top_keywords": [
+    [
+      "Agent IA",
+      3
+    ],
+    [
+      "RAG",
+      3
+    ],
+    [
+      "LangGraph",
+      3
+    ],
+    [
+      "LLM",
+      3
+    ],
+    [
+      "n8n",
+      2
+    ],
+    [
+      "ChatGPT",
+      1
+    ],
+    [
+      "Make",
+      1
+    ],
+    [
+      "Workflow",
+      1
+    ],
+    [
+      "IA générative",
+      1
+    ],
+    [
+      "Data Science",
+      1
+    ],
+    [
+      "Automatisation de processus métier",
+      1
+    ],
+    [
+      "LLM orchestration",
+      1
+    ],
+    [
+      "Prompt Engineering",
+      1
+    ],
+    [
+      "Secure RAG architectures",
+      1
+    ],
+    [
+      "Advanced AI agents",
+      1
+    ],
+    [
+      "Enterprise AI solutions",
+      1
+    ],
+    [
+      "MCP Contributor",
+      1
+    ],
+    [
+      "MCP servers",
+      1
+    ],
+    [
+      "MCP protocol",
+      1
+    ],
+    [
+      "MCP",
+      1
+    ],
+    [
+      "Claude API",
+      1
+    ]
+  ],
+  "pricing": {
+    "average_tjm": 567,
+    "min_tjm": 350,
+    "max_tjm": 850,
+    "recommended_tjm": 850,
+    "premium_justification": "Multi-agent A2A protocol + MCP expertise + 117-tool autonomous stack"
+  },
+  "title_keywords": [
+    [
+      "Automatisation",
+      3
+    ],
+    [
+      "Agent",
+      3
+    ],
+    [
+      "RAG",
+      3
+    ],
+    [
+      "Architect",
+      2
+    ],
+    [
+      "LLM",
+      2
+    ],
+    [
+      "MCP",
+      2
+    ],
+    [
+      "Expert",
+      1
+    ],
+    [
+      "agent",
+      1
+    ],
+    [
+      "N8n",
+      1
+    ],
+    [
+      "LangChain",
+      1
+    ],
+    [
+      "Consultant",
+      1
+    ],
+    [
+      "CTO",
+      1
+    ],
+    [
+      "Full-Stack",
+      1
+    ],
+    [
+      "Web",
+      1
+    ],
+    [
+      "AI/ML",
+      1
+    ]
+  ],
+  "competitive_gaps": {
+    "my_unique_advantages": [
+      "117-tool autonomous Nexus Control Center",
+      "A2A inter-agent mesh protocol",
+      "Real-time desktop automation",
+      "Full EU AI Act compliance engine",
+      "Crypto + DeFi automation stack",
+      "3D asset pipeline (AI → Sketchfab)"
+    ],
+    "rare_but_valuable": [
+      "Model Context Protocol (MCP)",
+      "A2A Inter-Agent Protocol",
+      "EU AI Act Compliance Engine",
+      "Autonomous Agent Fleet (117 tools)",
+      "Real-time Desktop Automation",
+      "Crypto DeFi Trading Automation",
+      "3D AI Pipeline (Tripo3D → Sketchfab)",
+      "OpenClaw Orchestration"
+    ]
+  }
+}
